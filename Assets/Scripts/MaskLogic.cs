@@ -3,12 +3,24 @@ using UnityEngine;
 public class MaskLogic : MonoBehaviour
 {
     [Header("Guest & Mask Data")]
-    public GameObject[] guestPrefabs;          // Character prefabs (guests)
-    public GameObject[] maskTypeModels;        // Different mask prefabs/models
-    public Material[] maskMaterials;            // Materials/colors for masks
-    public GameObject[] maskAccessoryModels;   // Accessory prefabs (excluding 'None')
-    public Transform GuestSpawnPoint;        // Spawn point for guests
+    public GameObject[] guestPrefabs;         // Character prefabs (guests)
+    public GameObject[] maskTypeModels;       // Different mask prefabs/models
+    public Material[] maskMaterials;          // Materials/colors for masks
+    public GameObject[] maskAccessoryModels;  // Accessory prefabs (excluding 'None')
+    public Transform GuestSpawnPoint;         // Spawn point for guests
 
+    public Transform[] StandPoints;
+
+
+    //Different stand points for guests
+    public enum StandPoint
+    { 
+        StandPoint1,
+        StandPoint2,
+        StandPoint3,
+        StandPoint4,
+        StandPoint5
+    }
 
     // Types of masks available
     public enum MaskType
@@ -79,8 +91,9 @@ public class MaskLogic : MonoBehaviour
     // Instantiate a guest and equip it with either the target or civilian mask
     void SpawnGuestWithMask()
     {
+
         int guestIndex = Random.Range(0, guestPrefabs.Length);
-        GameObject guest = Instantiate(guestPrefabs[guestIndex], Vector3.zero, Quaternion.identity);
+        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation);
 
         // Find the MaskAnchor transform on the guest to attach mask and accessory
         Transform maskAnchor = guest.transform.Find("MaskAnchor");

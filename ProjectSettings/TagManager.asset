@@ -8,6 +8,7 @@ TagManager:
   - Guest
   - Feather
   - Accessory
+  - Chair
   layers:
   - Default
   - TransparentFX
