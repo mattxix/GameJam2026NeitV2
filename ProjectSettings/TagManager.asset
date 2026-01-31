@@ -8,6 +8,11 @@ TagManager:
   - DrinkPour
   - DrinkTopping
   - DrinkPlacer
+  - Mask
+  - Guest
+  - Feather
+  - Accessory
+  - Chair
   layers:
   - Default
   - TransparentFX
