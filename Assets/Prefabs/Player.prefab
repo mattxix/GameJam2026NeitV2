@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3687172951038247601
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4804856692704304808}
+  m_Layer: 0
+  m_Name: DrinkTargetPos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4804856692704304808
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3687172951038247601}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: 0.7071066, z: -0, w: -0.707107}
+  m_LocalPosition: {x: 0, y: -0.625, z: 1.304}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6054136444791632538}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &6479446054112550015
 GameObject:
   m_ObjectHideFlags: 0
@@ -146,9 +177,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 846cd3e551e0a7749ac70e629083f6bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speed: 7
+  speed: 4
   gravity: -9.8
-  jumpStrength: 9
+  jumpStrength: 0
 --- !u!114 &5961810738943918863
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -363,7 +394,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6479446054112550015}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2ec514fb929d3374e8ee6e705b304faf, type: 3}
   m_Name: 
@@ -389,6 +420,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   interactionAction: {fileID: 1781555164194001046, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  drinkLogic: {fileID: 0}
 --- !u!1 &8129447352923790866
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +434,7 @@ GameObject:
   - component: {fileID: 388501132644939483}
   - component: {fileID: 7638395526606350125}
   - component: {fileID: 6167373400933957150}
-  - component: {fileID: 8483486022101055028}
+  - component: {fileID: 66571684664216873}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -422,7 +454,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4804856692704304808}
   m_Father: {fileID: 4934762447924521831}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!20 &5272796560160075398
@@ -458,7 +491,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 80
+  field of view: 70
   orthographic: 0
   orthographic size: 5
   m_Depth: -1
@@ -545,7 +578,7 @@ MonoBehaviour:
   sensY: 25
   maxVerticalRotation: 45
   minVerticalRotation: -45
---- !u!114 &8483486022101055028
+--- !u!114 &66571684664216873
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -554,12 +587,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 8129447352923790866}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 919a41b2ae87c174584bc1aa4ffc09be, type: 3}
+  m_Script: {fileID: 11500000, guid: 172515602e62fb746b5d573b38a5fe58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  raycastDistance: 5
-  mainCamera: {fileID: 0}
-  interactableLayer:
-    serializedVersion: 2
-    m_Bits: 0
-  interactionAction: {fileID: 0}
+  m_IsGlobal: 1
+  priority: 0
+  blendDistance: 0
+  weight: 1
+  sharedProfile: {fileID: 11400000, guid: 0c61c4ead4d77f54abb1b37c96527e1c, type: 2}

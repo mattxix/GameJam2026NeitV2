@@ -47,16 +47,16 @@ public class RaycastFromPlayer : MonoBehaviour
             hoveredObject = hit.collider.gameObject;
             if (lastHovered != null && lastHovered != hoveredObject)
             {
-                lastHovered.GetComponent<MeshRenderer>().materials[1].SetFloat("_Scale", 1.0f);
+                lastHovered.GetComponent<Outline>().OutlineWidth = 0f;
 
             }
-            hoveredObject.GetComponent<MeshRenderer>().materials[1].SetFloat("_Scale", 1.02f);
+            hoveredObject.GetComponent<Outline>().OutlineWidth = 10f;
         }
         else
         {
             if(lastHovered != null)
             {
-                lastHovered.GetComponent<MeshRenderer>().materials[1].SetFloat("_Scale", 1.0f);
+                lastHovered.GetComponent<Outline>().OutlineWidth = 0f;
 
             }
         }

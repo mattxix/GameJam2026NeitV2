@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -13,6 +14,8 @@ public class DrinkProperties : MonoBehaviour
     public GameObject liquid;
     public GameObject ice;
     public GameObject poison;
+    private float fillProgress = 0.0f;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -65,7 +68,9 @@ public class DrinkProperties : MonoBehaviour
         else
         {
             liquid.SetActive(true);
-           // Debug.Log(drinkFlavor);
+            // Debug.Log(drinkFlavor);
+            liquid.transform.localScale = Vector3.one * fillProgress;
+            liquid.transform.localPosition = new Vector3(0, Mathf.Lerp(.5f, 0, fillProgress), 0);
             liquid.gameObject.GetComponent<MeshRenderer>().material = FindFlavor(drinkFlavor);
         }
 
@@ -114,6 +119,7 @@ public class DrinkProperties : MonoBehaviour
         if (drinkFlavor == null)
         {
             drinkFlavor = drinkLiquid;
+            StartCoroutine(FillLiquidAnim());
         }
     }
 
@@ -122,6 +128,19 @@ public class DrinkProperties : MonoBehaviour
         if (drinkFlavor != null && topping == null)
         {
             topping = addedTopping;
+        }
+    }
+
+    IEnumerator FillLiquidAnim()
+    {
+        float frames = 100;
+        float currentFrame = 0;
+        for (float i = 0; i < frames; i++)
+        {
+            currentFrame++;
+            fillProgress = currentFrame / frames;
+            Debug.Log(fillProgress);
+            yield return new WaitForEndOfFrame();
         }
     }
 }

@@ -27,7 +27,7 @@ public class LadderScript : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Ladder"))
-        {
+        {   
             playerInput.enabled = false;
             insideLadder = !insideLadder;
         }
