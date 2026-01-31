@@ -43,9 +43,16 @@ public class DrinkLogic : MonoBehaviour
 
     public void DeleteDrink()
     {
-        if (currentGlass != null)
+        if (currentGlass != null && currentGlass.gameObject.GetComponent<DrinkProperties>().topping != null)
         {
             Object.Destroy(currentGlass);
+
+            currentGlass = null;
+            currentGlass.gameObject.GetComponent<DrinkProperties>().drinkFlavor = null;
+            currentGlass.gameObject.GetComponent<DrinkProperties>().topping = null;
+            currentGlass.gameObject.GetComponent<DrinkProperties>().hasIce = false;
+            currentGlass.gameObject.GetComponent<DrinkProperties>().hasPoison = false;
+
         }
     }
 
@@ -118,6 +125,18 @@ public class DrinkLogic : MonoBehaviour
                
             }
         }
+    }
+
+    public void PlaceDrink(Transform placePos)
+    {
+        //convert string to integer
+        if (!placePos.Find("Drink") && currentGlass.GetComponent<DrinkProperties>().topping != null)
+        {
+            GameObject drinkCopy = Instantiate(currentGlass, placePos.position, placePos.rotation, placePos);
+            drinkCopy.GetComponent<DrinkProperties>().enabled = false;
+            DeleteDrink();
+        }
+
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

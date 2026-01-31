@@ -93,6 +93,10 @@ public class RaycastFromPlayer : MonoBehaviour
         {
             drinkLogic.AddTopping(hoveredObject.name);
         }
+        if (hoveredObject.CompareTag("DrinkPlacer"))
+        {
+            drinkLogic.PlaceDrink(hoveredObject.transform.Find("DrinkPos"));
+        }
 
 
         // Example: call interaction on hovered object
