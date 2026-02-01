@@ -1,4 +1,7 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuScripts : MonoBehaviour
 {
@@ -22,6 +25,7 @@ public class MenuScripts : MonoBehaviour
 
     void Start()
     {
+        SceneManager.LoadScene(0);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SetActiveCamera(cam1);
@@ -29,6 +33,7 @@ public class MenuScripts : MonoBehaviour
 
     public void StartGame()
     {
+        SceneManager.LoadScene(1);
         if (menuCanvas != null)
         {
             menuCanvas.gameObject.SetActive(false);
@@ -42,6 +47,7 @@ public class MenuScripts : MonoBehaviour
 
     public void MainMenu()
     {
+        SceneManager.LoadScene(0);
         Cursor.visible = true;
         Cursor.lockState = CursorLockMode.None;
         SetActiveCamera(cam1);
@@ -51,9 +57,9 @@ public class MenuScripts : MonoBehaviour
 
     public void Instructions()
     {
+        SceneManager.LoadScene(2);
         Cursor.visible = true;
         SetActiveCamera(cam2);
-
     }
 
 }
