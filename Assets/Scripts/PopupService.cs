@@ -6,6 +6,7 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEditor.SceneManagement;
 using UnityEngine.InputSystem;
+using UnityEngine.SceneManagement;
 
 public class PopupService : MonoBehaviour
 {
@@ -69,6 +70,12 @@ public class PopupService : MonoBehaviour
             content.text = "Too many guests became suspicious of your demeanor and your cover was blown.";
         }
 
+        if (condition == "TEMP")
+        {
+            title.text = "YOU LOST YOUR JOB!";
+            content.text = "YOU FAILED YOUR MISSION.";
+        }
+
         for (float i = 0; i < 60; i++)
         {
             if (DOF != null)
@@ -80,7 +87,15 @@ public class PopupService : MonoBehaviour
             yield return new WaitForSeconds(0.02f);
         }
 
-        popup.SetActive(true);
+       // popup.SetActive(true);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
 
+
+    }
+
+    public void ClickRetry()
+    {
+        Debug.Log("TETTTR");
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 }

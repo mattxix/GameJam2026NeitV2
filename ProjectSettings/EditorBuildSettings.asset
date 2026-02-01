@@ -5,7 +5,7 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AnthonyBranch 1.unity
     guid: 746f3fb8305f44244bf68065847a07ae
   - enabled: 1
@@ -14,7 +14,7 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 99c9720ab356a0642a771bea13969a05
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AnthonyBranch 2.unity
     guid: ea9632aa3c2fa0e4b9b1625470124b07
   m_configObjects:

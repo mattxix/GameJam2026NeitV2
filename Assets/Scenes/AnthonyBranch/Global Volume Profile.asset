@@ -1,5 +1,52 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-6440013555505022437
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 29fa0085f50d5e54f8144f766051a691, type: 3}
+  m_Name: FilmGrain
+  m_EditorClassIdentifier: 
+  active: 1
+  type:
+    m_OverrideState: 1
+    m_Value: 0
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.51
+  response:
+    m_OverrideState: 1
+    m_Value: 0.8
+  texture:
+    m_OverrideState: 0
+    m_Value: {fileID: 0}
+--- !u!114 &-1249928718335801024
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5485954d14dfb9a4c8ead8edb0ded5b1, type: 3}
+  m_Name: LiftGammaGain
+  m_EditorClassIdentifier: 
+  active: 1
+  lift:
+    m_OverrideState: 1
+    m_Value: {x: 0.98745936, y: 1, z: 0.96710634, w: 0}
+  gamma:
+    m_OverrideState: 1
+    m_Value: {x: 0.9910483, y: 0.96635544, z: 1, w: 0}
+  gain:
+    m_OverrideState: 1
+    m_Value: {x: 1, y: 0.92124677, z: 0.8649291, w: 0}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15,6 +62,37 @@ MonoBehaviour:
   components:
   - {fileID: 878672670612386580}
   - {fileID: 3192321606410541198}
+  - {fileID: -6440013555505022437}
+  - {fileID: -1249928718335801024}
+  - {fileID: 775742370806408472}
+--- !u!114 &775742370806408472
+MonoBehaviour:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 899c54efeace73346a0a16faa3afe726, type: 3}
+  m_Name: Vignette
+  m_EditorClassIdentifier: 
+  active: 1
+  color:
+    m_OverrideState: 1
+    m_Value: {r: 0, g: 0, b: 0, a: 1}
+  center:
+    m_OverrideState: 1
+    m_Value: {x: 0.5, y: 0.5}
+  intensity:
+    m_OverrideState: 1
+    m_Value: 0.46
+  smoothness:
+    m_OverrideState: 1
+    m_Value: 0.12
+  rounded:
+    m_OverrideState: 0
+    m_Value: 0
 --- !u!114 &878672670612386580
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -36,10 +114,10 @@ MonoBehaviour:
     m_Value: 0
   gaussianEnd:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 39.16
   gaussianMaxRadius:
     m_OverrideState: 1
-    m_Value: 0.63
+    m_Value: 1.5
   highQualitySampling:
     m_OverrideState: 0
     m_Value: 0
@@ -82,10 +160,10 @@ MonoBehaviour:
     m_Value: 0
   intensity:
     m_OverrideState: 1
-    m_Value: 1.59
+    m_Value: 0.11
   scatter:
-    m_OverrideState: 0
-    m_Value: 0.7
+    m_OverrideState: 1
+    m_Value: 0.51
   clamp:
     m_OverrideState: 0
     m_Value: 65472

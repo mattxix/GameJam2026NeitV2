@@ -8,6 +8,7 @@ public class DrinkLogic : MonoBehaviour
     public Camera mainCamera;
     public GameObject player;
     public MaskLogic maskLogic;
+    public PopupService popupService;
 
     public Transform target;
     public float smoothTime = 0.1f;
@@ -161,6 +162,7 @@ public class DrinkLogic : MonoBehaviour
                     {
                         soundService.Fail(2f);
                         strikes++;
+                        StartCoroutine(popupService.PopupMenu("TEMP"));
                     }
                     maskLogic.CreateEnemyProfile();
                 }
@@ -177,6 +179,7 @@ public class DrinkLogic : MonoBehaviour
             {
                 soundService.Fail(2f);
                 strikes++;
+                StartCoroutine(popupService.PopupMenu("TEMP"));
             }
 
             Destroy(drinkCopy);

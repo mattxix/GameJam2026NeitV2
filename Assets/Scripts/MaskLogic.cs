@@ -48,7 +48,7 @@ public class MaskLogic : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(Random.Range(1, 4));
+            yield return new WaitForSeconds(Random.Range(5, 15));
 
             if (numGuests < 5)
             {
