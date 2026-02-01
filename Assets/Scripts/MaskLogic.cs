@@ -1,26 +1,28 @@
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using Random = UnityEngine.Random; // Alias Random to UnityEngine.Random
+
 
 public class MaskLogic : MonoBehaviour
 {
     [Header("Guest & Mask Data")]
     public GameObject[] guestPrefabs;         // Character prefabs (guests)
-    public GameObject[] maskTypeModels;       // Different mask prefabs/models
+    //public GameObject[] maskTypeModels;       // Different mask prefabs/models
     public Material[] maskMaterials;          // Materials/colors for masks
-    public GameObject[] maskAccessoryModels;  // Accessory prefabs (excluding 'None')
+    //public GameObject[] maskAccessoryModels;  // Accessory prefabs (excluding 'None')
     public Transform GuestSpawnPoint;         // Spawn point for guests
 
+    private int evilMaskBase;
+    private int evilAccessory;
+    private int evilColor;
+    private bool evilInScene;
 
+    public Transform viewportHolder;
 
-    // Types of masks available
-    public enum MaskType
-    {
-        M1,
-        M2,
-        M3,
-        M4,
-        M5
-    }
+    private int curGuest = 0;
 
     // Colors available for masks
     public enum MaskColor
@@ -32,50 +34,82 @@ public class MaskLogic : MonoBehaviour
         Navy
     }
 
-    // Accessories that can be added to masks
-    public enum MaskAccessory
-    {
-        FeatherLeft,
-        FeatherRight,
-        FlowerLeft,
-        FlowerRight,
-        None  // No accessory
-    }
-
-    // Target mask properties (special mask to find)
-    private MaskType targetType;
-    private MaskColor targetColor;
-    private MaskAccessory targetAccessory;
-
-    // Civilian mask properties (random masks)
-    private MaskType civilianType;
-    private MaskColor civilianColor;
-    private MaskAccessory civilianAccessory;
 
     void Start()
     {
-        // Randomize target mask and civilian mask at the start
-        RandomizeTargetMask();
-        RandomizeCivilianMask();
-
-        // Spawn one guest with either target or civilian mask
+        CreateEnemyProfile();
         SpawnGuestWithMask();
+        StartCoroutine(NPCSpawning());
     }
 
-    // Choose random mask details for the target
-    void RandomizeTargetMask()
+    IEnumerator NPCSpawning()
     {
-        targetType = (MaskType)Random.Range(0, maskTypeModels.Length);
-        targetColor = (MaskColor)Random.Range(0, maskMaterials.Length);
-        targetAccessory = (MaskAccessory)Random.Range(0, System.Enum.GetValues(typeof(MaskAccessory)).Length);
+        while (true)
+        {
+            yield return new WaitForSeconds(Random.Range(1, 4));
+
+            if (curGuest < 5)
+            {
+                SpawnGuestWithMask();
+            }
+        }
     }
 
-    // Choose random mask details for a civilian
-    void RandomizeCivilianMask()
+    private int RandomMask()
     {
-        civilianType = (MaskType)Random.Range(0, maskTypeModels.Length);
-        civilianColor = (MaskColor)Random.Range(0, maskMaterials.Length);
-        civilianAccessory = (MaskAccessory)Random.Range(0, System.Enum.GetValues(typeof(MaskAccessory)).Length);
+        int index = Random.Range(0, 4);
+        return index;
+    }
+
+    private int RandomAccessory()
+    {
+        int index = Random.Range(0, 3);
+        return index;
+    }
+
+    private int RandomMaskColor()
+    {
+        int index = Random.Range(0, maskMaterials.Length);
+        return index;
+    }
+
+
+    void CreateEnemyProfile()
+    {
+        evilMaskBase = RandomMask();
+        evilColor = RandomMaskColor();
+        evilAccessory = RandomAccessory();
+
+        foreach (Transform _maskTransform in viewportHolder.Find("Masks").transform)
+        {
+            GameObject _mask = _maskTransform.gameObject;
+            if (_mask.name == evilMaskBase.ToString())
+            {
+                Renderer renderer = _mask.GetComponent<Renderer>();
+                if (renderer != null)
+                {
+                    renderer.material = maskMaterials[evilColor];
+                }
+                _mask.SetActive(true);
+            }
+            else
+            {
+                _mask.SetActive(false);
+            }
+        }
+
+        foreach (Transform _accTransform in viewportHolder.Find("Accessories").transform)
+        {
+            GameObject _acc = _accTransform.gameObject;
+            if (_acc.name == evilAccessory.ToString())
+            {
+                _acc.SetActive(true);
+            }
+            else
+            {
+                _acc.SetActive(false);
+            }
+        }
     }
 
     // Instantiate a guest and equip it with either the target or civilian mask
@@ -83,94 +117,97 @@ public class MaskLogic : MonoBehaviour
     {
 
         int guestIndex = Random.Range(0, guestPrefabs.Length);
-        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation);
+        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, GameObject.Find("GuestsHolder").transform);
+        guest.name = curGuest.ToString();
 
-        // Find the MaskAnchor transform on the guest to attach mask and accessory
-        Transform maskAnchor = guest.transform.Find("MaskAnchor");
-        if (maskAnchor == null)
+        if(Random.Range(0, 100) <= 20 && !evilInScene)
         {
-            Debug.LogWarning("MaskAnchor not found on guest prefab.");
-            return;
-        }
+            evilInScene = true;
+            guest.GetComponent<NPCData>().isEvil = true;
+            guest.GetComponent<NPCData>().maskType = evilMaskBase;
+            guest.GetComponent<NPCData>().maskColor = evilColor;
+            guest.GetComponent<NPCData>().accessory = evilAccessory;
 
-        // Remove any existing masks/accessories from previous spawn
-        foreach (Transform child in maskAnchor)
-            Destroy(child.gameObject);
+            GameObject mask = guest.transform.Find("Masks").Find(evilMaskBase.ToString()).gameObject;
+            mask.SetActive(true);
 
-        // 20% chance to spawn the target mask, otherwise spawn civilian mask
-        if (Random.value < 0.5f)
-        {
-            AttachMask(maskAnchor, targetType, targetColor, targetAccessory);
-            Debug.Log("Spawned Target Mask");
+            Renderer renderer = mask.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material = maskMaterials[evilColor];
+            }
+
+            GameObject acc = guest.transform.Find("Accessories").Find(evilAccessory.ToString()).gameObject;
+            acc.SetActive(true);
+
         }
         else
         {
-            AttachMask(maskAnchor, civilianType, civilianColor, civilianAccessory);
-            Debug.Log("Spawned Civilian Mask");
+            var maskIndex = RandomMask();
+            GameObject mask = guest.transform.Find("Masks").Find(maskIndex.ToString()).gameObject;
+            mask.SetActive(true);
+            guest.GetComponent<NPCData>().maskType = maskIndex;
+
+
+            var mat = RandomMaskColor();
+            Renderer renderer = mask.GetComponent<Renderer>();
+            if (renderer != null)
+            {
+                renderer.material = maskMaterials[mat];
+            }
+            guest.GetComponent<NPCData>().maskColor = mat;//int.Parse(mat.name);
+
+            int accIndex = RandomAccessory();
+
+            do
+            {
+                accIndex = RandomAccessory();
+
+            } while (accIndex == evilAccessory);
+
+            GameObject acc = guest.transform.Find("Accessories").Find(accIndex.ToString()).gameObject;
+            acc.SetActive(true);
+            guest.GetComponent<NPCData>().accessory = accIndex;
+
         }
+
         guest.GetComponent<WalkToPoints>().walkingDirection = 1;
-        guest.GetComponent<WalkToPoints>()._guestIndex = guestIndex;
+        guest.GetComponent<WalkToPoints>()._guestIndex = curGuest;
+
+        curGuest++;
 
     }
 
     // Attach mask and accessory to the guest's mask anchor
-    void AttachMask(Transform maskAnchor, MaskType type, MaskColor color, MaskAccessory accessory)
-    {
-        int typeIndex = (int)type;
+    //void AttachMask(Transform maskAnchor, MaskType type, MaskColor color, MaskAccessory accessory)
+    //{
+    // int typeIndex = (int)type;
 
-        // Validate mask type index
-        if (typeIndex < 0 || typeIndex >= maskTypeModels.Length)
-        {
-            Debug.LogError("Invalid mask type index.");
-            return;
-        }
+    // Validate mask type index
+    //  if (typeIndex < 0 || typeIndex >= maskTypeModels.Length)
+    //   {
+    //       Debug.LogError("Invalid mask type index.");
+    //        return;
+    //   }
 
-        // Instantiate the mask prefab as a child of maskAnchor
-        GameObject mask = Instantiate(maskTypeModels[typeIndex], transform.position, transform.rotation, maskAnchor);
-        mask.tag = "Mask";
+    // Instantiate the mask prefab as a child of maskAnchor
+    //  GameObject mask = Instantiate(maskTypeModels[typeIndex], transform.position, transform.rotation, maskAnchor);
+    //  mask.tag = "Mask";
 
-        // Reset transform so it aligns properly
-        //mask.transform.position = new Vector3(0,0,.185f);
-        //mask.transform.localRotation = Quaternion.identity;
-        //mask.transform.localScale = Vector3.one;
+    // Reset transform so it aligns properly
+    //mask.transform.position = new Vector3(0,0,.185f);
+    //mask.transform.localRotation = Quaternion.identity;
+    //mask.transform.localScale = Vector3.one;
 
-        // Apply the selected color/material to the mask
-        Renderer renderer = mask.GetComponent<Renderer>();
-        if (renderer != null && (int)color < maskMaterials.Length)
-        {
-            renderer.material = maskMaterials[(int)color];
-        }
+    // Apply the selected color/material to the mask
+    //  Renderer renderer = mask.GetComponent<Renderer>();
+    //  if (renderer != null && (int)color < maskMaterials.Length)
+    //  {
+    //      renderer.material = maskMaterials[(int)color];
+    //  }
 
-        // If accessory is 'None', skip adding accessory
-        if (accessory == MaskAccessory.None)
-        {
-            return;
-        }
-        // Find the accessory anchor on the mask prefab, or fallback to mask root
-        Transform accessoryAnchor = mask.transform.Find("AccessoryAnchor");
-        if (accessoryAnchor == null)
-        {
-            accessoryAnchor = mask.transform;
-        }
 
-        int accIndex = (int)accessory;
-
-        // Validate accessory index against the accessory models array
-        if (accIndex < 0 || accIndex >= maskAccessoryModels.Length)
-        { 
-            return;
-        }
-        // Instantiate accessory and attach it
-        GameObject accessoryObj = Instantiate(maskAccessoryModels[accIndex], accessoryAnchor);
-        accessoryObj.tag = "Accessory";
-
-        // Reset transform to align correctly
-        accessoryObj.transform.localPosition = Vector3.zero;
-        accessoryObj.transform.localRotation = Quaternion.identity;
-        accessoryObj.transform.localScale = Vector3.one;
-    }
-
- 
+    //}
 
 }
 

@@ -29,6 +29,8 @@ public class WalkToPoints : MonoBehaviour
        FollowNodes();
     }
 
+
+
     void FollowNodes()
     {
      //  if (nodes == null || nodes.Count == 0)
@@ -45,23 +47,25 @@ public class WalkToPoints : MonoBehaviour
             targetPosition = seats.transform.Find(_guestIndex.ToString()).position;
         }
         transform.position = Vector3.MoveTowards(transform.position, targetPosition, moveSpeed * Time.deltaTime);
+        
         transform.LookAt(targetPosition);
-        Debug.Log(currentNodeIndex);
         // Check if the object is close enough to the current node
         if (Vector3.Distance(transform.position, targetPosition) < stoppingDistance)
         {
             // Move to the next node
-            Debug.Log(walkingDirection);
-            currentNodeIndex+=walkingDirection;
-
-            // Optional: loop the path, stop at the end, or destroy the object
-            if (currentNodeIndex >= 4)
+            if(currentNodeIndex < 3)
             {
-                transform.LookAt(targetPosition);
-
-                //currentNodeIndex = 0; // Loop back to the start
-                // walkingDirection = 0;                      // Or you could disable the script: this.enabled = false;
+                currentNodeIndex += walkingDirection;
             }
+            else
+            {
+               transform.rotation = seats.transform.Find(_guestIndex.ToString()).rotation;
+            }
+
+
+            Debug.Log(currentNodeIndex);
+
+
         }
 
     }

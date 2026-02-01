@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem.Controls;
 
 public class DrinkLogic : MonoBehaviour
 {
@@ -134,7 +135,32 @@ public class DrinkLogic : MonoBehaviour
         {
             GameObject drinkCopy = Instantiate(currentGlass, placePos.position, placePos.rotation, placePos);
             drinkCopy.GetComponent<DrinkProperties>().enabled = false;
+
+            var holder = GameObject.Find("GuestsHolder");
+            Debug.Log("PUT ON "+ placePos.transform.parent.gameObject.name);
+            var corrGuest = holder.transform.Find(placePos.parent.name);
+            var guestNeeds = corrGuest.GetComponent<NPCData>();
+
+            var flavor = currentGlass.gameObject.GetComponent<DrinkProperties>().drinkFlavor;
+            var hasIce = currentGlass.gameObject.GetComponent<DrinkProperties>().hasIce;
+            var topping = currentGlass.gameObject.GetComponent<DrinkProperties>().topping;
+            if (flavor == guestNeeds.desiredFlavor)
+            {
+                if(hasIce == guestNeeds.wantsIce)
+                {
+                    if (topping == guestNeeds.desiredTopping)
+                    {
+                        Debug.Log("DRINKS MATCH!");
+                        Destroy(drinkCopy);
+                        Destroy(corrGuest.gameObject);
+                    }
+
+                }
+            }
+                //.Find(placePos.gameObject.name);
+
             DeleteDrink();
+
         }
 
     }
