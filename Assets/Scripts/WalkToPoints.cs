@@ -14,6 +14,7 @@ public class WalkToPoints : MonoBehaviour
     public int _guestIndex;
     private GameObject waypoints;
     private GameObject seats;
+    public 
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -60,6 +61,8 @@ public class WalkToPoints : MonoBehaviour
             else
             {
                transform.rotation = seats.transform.Find(_guestIndex.ToString()).rotation;
+                transform.GetComponent<NPCData>().ReachedBar();
+
             }
 
 

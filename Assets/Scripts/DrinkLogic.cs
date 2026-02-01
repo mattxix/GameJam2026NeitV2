@@ -7,10 +7,11 @@ public class DrinkLogic : MonoBehaviour
     public GameObject defaultGlass;
     public Camera mainCamera;
     public GameObject player;
+    public MaskLogic maskLogic;
 
     public Transform target;
-    public float smoothTime = 0.1f; 
-
+    public float smoothTime = 0.1f;
+    public int strikes = 0;
 
     private Vector3 positionVelocity = Vector3.zero;
     private Vector3 rotationVelocity = Vector3.zero;
@@ -44,15 +45,16 @@ public class DrinkLogic : MonoBehaviour
 
     public void DeleteDrink()
     {
-        if (currentGlass != null && currentGlass.gameObject.GetComponent<DrinkProperties>().topping != null)
+        if (currentGlass != null && currentGlass.GetComponent<DrinkProperties>().topping != null)
         {
+
+            //currentGlass.GetComponent<DrinkProperties>().drinkFlavor = null;
+            //currentGlass.GetComponent<DrinkProperties>().topping = null;
+            //currentGlass.GetComponent<DrinkProperties>().hasIce = false;
+            //currentGlass.GetComponent<DrinkProperties>().hasPoison = false;
+            //currentGlass = null;
             Object.Destroy(currentGlass);
 
-            currentGlass = null;
-            currentGlass.gameObject.GetComponent<DrinkProperties>().drinkFlavor = null;
-            currentGlass.gameObject.GetComponent<DrinkProperties>().topping = null;
-            currentGlass.gameObject.GetComponent<DrinkProperties>().hasIce = false;
-            currentGlass.gameObject.GetComponent<DrinkProperties>().hasPoison = false;
 
         }
     }
@@ -131,8 +133,9 @@ public class DrinkLogic : MonoBehaviour
     public void PlaceDrink(Transform placePos)
     {
         //convert string to integer
-        if (!placePos.Find("Drink") && currentGlass.GetComponent<DrinkProperties>().topping != null)
+        if (!placePos.Find("Drink") && currentGlass != null  && currentGlass.GetComponent<DrinkProperties>().topping != null)
         {
+
             GameObject drinkCopy = Instantiate(currentGlass, placePos.position, placePos.rotation, placePos);
             drinkCopy.GetComponent<DrinkProperties>().enabled = false;
 
@@ -144,20 +147,43 @@ public class DrinkLogic : MonoBehaviour
             var flavor = currentGlass.gameObject.GetComponent<DrinkProperties>().drinkFlavor;
             var hasIce = currentGlass.gameObject.GetComponent<DrinkProperties>().hasIce;
             var topping = currentGlass.gameObject.GetComponent<DrinkProperties>().topping;
-            if (flavor == guestNeeds.desiredFlavor)
+            var isPoisoned = currentGlass.gameObject.GetComponent<DrinkProperties>().hasPoison;
+            if (flavor == guestNeeds.desiredFlavor && hasIce == guestNeeds.wantsIce && topping == guestNeeds.desiredTopping)
             {
-                if(hasIce == guestNeeds.wantsIce)
-                {
-                    if (topping == guestNeeds.desiredTopping)
-                    {
-                        Debug.Log("DRINKS MATCH!");
-                        Destroy(drinkCopy);
-                        Destroy(corrGuest.gameObject);
-                    }
 
+                if (guestNeeds.isEvil)
+                {
+                    if (isPoisoned)
+                    {
+                        soundService.PoisonedGuest(2f);    
+                    }
+                    else
+                    {
+                        soundService.Fail(2f);
+                        strikes++;
+                    }
+                    maskLogic.CreateEnemyProfile();
                 }
+                else
+                {
+                    soundService.Glass();
+                }
+
+
+              
+                //   Debug.Log("DRINKS MATCH!");
             }
-                //.Find(placePos.gameObject.name);
+            else
+            {
+                soundService.Fail(2f);
+                strikes++;
+            }
+
+            Destroy(drinkCopy);
+            Destroy(corrGuest.gameObject);
+            maskLogic.numGuests--;
+            maskLogic.curGuest = int.Parse(placePos.parent.name);
+            //.Find(placePos.gameObject.name);
 
             DeleteDrink();
 

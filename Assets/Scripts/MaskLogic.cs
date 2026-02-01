@@ -22,7 +22,8 @@ public class MaskLogic : MonoBehaviour
 
     public Transform viewportHolder;
 
-    private int curGuest = 0;
+    public int curGuest = 0;
+    public int numGuests = 0;
 
     // Colors available for masks
     public enum MaskColor
@@ -40,6 +41,7 @@ public class MaskLogic : MonoBehaviour
         CreateEnemyProfile();
         SpawnGuestWithMask();
         StartCoroutine(NPCSpawning());
+
     }
 
     IEnumerator NPCSpawning()
@@ -48,12 +50,14 @@ public class MaskLogic : MonoBehaviour
         {
             yield return new WaitForSeconds(Random.Range(1, 4));
 
-            if (curGuest < 5)
+            if (numGuests < 5)
             {
                 SpawnGuestWithMask();
             }
         }
     }
+
+    
 
     private int RandomMask()
     {
@@ -74,7 +78,7 @@ public class MaskLogic : MonoBehaviour
     }
 
 
-    void CreateEnemyProfile()
+   public void CreateEnemyProfile()
     {
         evilMaskBase = RandomMask();
         evilColor = RandomMaskColor();
@@ -174,7 +178,10 @@ public class MaskLogic : MonoBehaviour
         guest.GetComponent<WalkToPoints>().walkingDirection = 1;
         guest.GetComponent<WalkToPoints>()._guestIndex = curGuest;
 
-        curGuest++;
+        numGuests++;
+        curGuest = numGuests;
+
+
 
     }
 

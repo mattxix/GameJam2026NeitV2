@@ -8,6 +8,8 @@ public class SFXService : MonoBehaviour
     public AudioClip grab;
     public AudioClip ice;
     public AudioClip poison;
+    public AudioClip fail;
+    public AudioClip poisonedGuest;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -41,6 +43,18 @@ public class SFXService : MonoBehaviour
     public void Poison(float vol = 1.0f)
     {
         sfxSource.clip = poison;
+        sfxSource.volume = vol;
+        sfxSource.Play();
+    }
+    public void Fail(float vol = 1.0f)
+    {
+        sfxSource.clip = fail;
+        sfxSource.volume = vol;
+        sfxSource.Play();
+    }
+    public void PoisonedGuest(float vol = 1.0f)
+    {
+        sfxSource.clip = poisonedGuest;
         sfxSource.volume = vol;
         sfxSource.Play();
     }
