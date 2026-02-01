@@ -139,7 +139,7 @@ public class DrinkProperties : MonoBehaviour
         {
             currentFrame++;
             fillProgress = currentFrame / frames;
-            Debug.Log(fillProgress);
+            //Debug.Log(fillProgress);
             yield return new WaitForEndOfFrame();
         }
     }

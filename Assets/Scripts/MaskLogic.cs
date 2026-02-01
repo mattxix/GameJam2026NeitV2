@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class MaskLogic : MonoBehaviour
@@ -9,18 +10,7 @@ public class MaskLogic : MonoBehaviour
     public GameObject[] maskAccessoryModels;  // Accessory prefabs (excluding 'None')
     public Transform GuestSpawnPoint;         // Spawn point for guests
 
-    public Transform[] StandPoints;
 
-
-    //Different stand points for guests
-    public enum StandPoint
-    { 
-        StandPoint1,
-        StandPoint2,
-        StandPoint3,
-        StandPoint4,
-        StandPoint5
-    }
 
     // Types of masks available
     public enum MaskType
@@ -118,6 +108,9 @@ public class MaskLogic : MonoBehaviour
             AttachMask(maskAnchor, civilianType, civilianColor, civilianAccessory);
             Debug.Log("Spawned Civilian Mask");
         }
+        guest.GetComponent<WalkToPoints>().walkingDirection = 1;
+        guest.GetComponent<WalkToPoints>()._guestIndex = guestIndex;
+
     }
 
     // Attach mask and accessory to the guest's mask anchor
@@ -133,13 +126,13 @@ public class MaskLogic : MonoBehaviour
         }
 
         // Instantiate the mask prefab as a child of maskAnchor
-        GameObject mask = Instantiate(maskTypeModels[typeIndex], maskAnchor);
+        GameObject mask = Instantiate(maskTypeModels[typeIndex], transform.position, transform.rotation, maskAnchor);
         mask.tag = "Mask";
 
         // Reset transform so it aligns properly
-        mask.transform.localPosition = Vector3.zero;
-        mask.transform.localRotation = Quaternion.identity;
-        mask.transform.localScale = Vector3.one;
+        //mask.transform.position = new Vector3(0,0,.185f);
+        //mask.transform.localRotation = Quaternion.identity;
+        //mask.transform.localScale = Vector3.one;
 
         // Apply the selected color/material to the mask
         Renderer renderer = mask.GetComponent<Renderer>();
@@ -176,4 +169,8 @@ public class MaskLogic : MonoBehaviour
         accessoryObj.transform.localRotation = Quaternion.identity;
         accessoryObj.transform.localScale = Vector3.one;
     }
+
+ 
+
 }
+
