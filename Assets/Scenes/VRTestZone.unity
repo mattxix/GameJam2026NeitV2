@@ -2400,6 +2400,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2568361538961216554, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: 'm_Colliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3694096389274870930, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
