@@ -529,7 +529,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (13)
+      value: Drink (16)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -675,7 +675,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (9)
+      value: Drink (11)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -1360,7 +1360,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (15)
+      value: Drink (10)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -2250,12 +2250,48 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2358971751241672981, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358971751241672981, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358971751241672981, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2358971751241672981, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2568361538961216554, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: 'm_Colliders.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 3694096389274870930, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3694096389274870930, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864372046294199588, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864372046294199588, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864372046294199588, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4864372046294199588, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5647075379933336741, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
@@ -2298,12 +2334,44 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6296146222503104500, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296146222503104500, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296146222503104500, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6296146222503104500, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6355936665623645124, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6355936665623645124, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809304691574038316, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809304691574038316, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809304691574038316, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6809304691574038316, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7359510280824779414, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
@@ -2320,6 +2388,22 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8021763629331169801, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8597308747146838099, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8597308747146838099, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8597308747146838099, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8597308747146838099, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8646315589309663949, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
@@ -3031,7 +3115,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (3)
+      value: Drink (8)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -3750,7 +3834,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink
+      value: Drink (17)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -6370,7 +6454,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (12)
+      value: Drink (3)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -7048,7 +7132,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (5)
+      value: Drink (4)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -7359,7 +7443,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (7)
+      value: Drink (15)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -8444,7 +8528,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (10)
+      value: Drink (14)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -9924,7 +10008,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (2)
+      value: Drink
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -10876,7 +10960,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (6)
+      value: Drink (12)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -11584,7 +11668,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (16)
+      value: Drink (5)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -12131,7 +12215,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (4)
+      value: Drink (1)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -12693,7 +12777,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (14)
+      value: Drink (7)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -12839,7 +12923,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (11)
+      value: Drink (9)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -14550,7 +14634,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (8)
+      value: Drink (2)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -14992,7 +15076,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (1)
+      value: Drink (13)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
@@ -15138,7 +15222,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
-      value: Drink (17)
+      value: Drink (6)
       objectReference: {fileID: 0}
     - target: {fileID: 730532710119355532, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
