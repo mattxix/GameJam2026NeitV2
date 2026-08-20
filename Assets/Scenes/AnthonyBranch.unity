@@ -3045,6 +3045,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 532746656580829487, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 597400024762629052, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Name
       value: Drink
@@ -3059,6 +3063,10 @@ PrefabInstance:
       objectReference: {fileID: 188483116}
     - target: {fileID: 1162072733593065382, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2181369169148936527, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4203458854376411561, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
@@ -6068,6 +6076,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 1657594248}
+    - target: {fileID: 2181369169148936527, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4203458854376411561, guid: cc555e7318a636f4daf8c45a97787187, type: 3}
       propertyPath: m_Mesh
       value: 
