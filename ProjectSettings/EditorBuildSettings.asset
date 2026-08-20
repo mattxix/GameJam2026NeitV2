@@ -18,6 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/AnthonyBranch 2.unity
     guid: ea9632aa3c2fa0e4b9b1625470124b07
   m_configObjects:
+    com.unity.input.settings: {fileID: 11400000, guid: 15d14b6f18e67f648bc438998b765b41, type: 2}
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: a285a53a8c253d44190bbe0ab10321de, type: 2}
     com.unity.xr.openxr.settings4: {fileID: 11400000, guid: e363d7a5cc10cbe4992d2ecae720877b, type: 2}
