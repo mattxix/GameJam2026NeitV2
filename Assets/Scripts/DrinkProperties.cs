@@ -12,7 +12,7 @@ public class DrinkProperties : MonoBehaviour
     public Material[] drinkMaterials;
     public GameObject[] drinkToppings;
     public GameObject liquid;
-    public GameObject ice;
+   
     public GameObject poison;
     private float fillProgress = 0.0f;
 
@@ -90,7 +90,7 @@ public class DrinkProperties : MonoBehaviour
             }
         }
 
-        ice.SetActive(hasIce);
+        //ice.SetActive(hasIce);
         poison.SetActive(hasPoison);
     }
 
