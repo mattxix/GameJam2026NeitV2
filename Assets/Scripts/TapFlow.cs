@@ -22,7 +22,16 @@ public class TapFlow : MonoBehaviour
     // Wire this to onValueChanged in the Inspector.
     public void SetFlow(float value)
     {
-        float t = flowCurve.Evaluate(value);
-        emission.rateOverTime = maxRate * t;
+        float rate = maxRate * flowCurve.Evaluate(value);
+        emission.rateOverTime = rate;
+
+        if (rate > 0.01f)
+        {
+            if (!stream.isPlaying) stream.Play();
+        }
+        else if (stream.isPlaying)
+        {
+            stream.Stop(true, ParticleSystemStopBehavior.StopEmitting);
+        }
     }
 }

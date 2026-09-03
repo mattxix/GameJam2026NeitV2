@@ -1153,7 +1153,7 @@ PrefabInstance:
     - target: {fileID: 9089752763599205581, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 265760665}
+      objectReference: {fileID: 0}
     - target: {fileID: 9089752763599205581, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -1170,7 +1170,8 @@ PrefabInstance:
       propertyPath: onValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 9089752763599205581, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8382483008344818684, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
@@ -1181,8 +1182,11 @@ PrefabInstance:
       addedObject: {fileID: 265760662}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 270461332519800360, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
-      insertIndex: 2
+      insertIndex: 1
       addedObject: {fileID: 1374034056}
+    - targetCorrespondingSourceObject: {fileID: 270461332519800360, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+      insertIndex: 2
+      addedObject: {fileID: 1374034055}
   m_SourcePrefab: {fileID: 100100000, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
 --- !u!1 &265760661
 GameObject:
@@ -1211,7 +1215,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 265760661}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.0023110434, y: -0, z: -0, w: 0.9999974}
+  m_LocalRotation: {x: -0.002311051, y: -0, z: -0, w: 0.9999974}
   m_LocalPosition: {x: -0.40550002, y: 1.7442495, z: -1.5176913}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -6036,7 +6040,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0.22499847
+      time: 0
       value: 0
       inSlope: 0
       outSlope: 0
@@ -6045,13 +6049,13 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.7541666
+      time: 1
       value: 1
-      inSlope: -0.0024109855
-      outSlope: -0.0024109855
+      inSlope: 0
+      outSlope: 0
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.9330682
+      inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -7291,7 +7295,12 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 270461332519800360, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
   m_PrefabInstance: {fileID: 265618247}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1374034056
+--- !u!65 &1374034054 stripped
+BoxCollider:
+  m_CorrespondingSourceObject: {fileID: 6810592404641009188, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
+  m_PrefabInstance: {fileID: 265618247}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1374034055
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7305,6 +7314,151 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drink: 0
   stream: {fileID: 265760664}
+--- !u!114 &1374034056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1374034051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f49beac066663744b89771e3efc5392, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_InteractionManager: {fileID: 0}
+  m_Colliders:
+  - {fileID: 1374034054}
+  m_InteractionLayers:
+    m_Bits: 1
+  m_DistanceCalculationMode: 1
+  m_SelectMode: 0
+  m_FocusMode: 1
+  m_CustomReticle: {fileID: 0}
+  m_AllowGazeInteraction: 0
+  m_AllowGazeSelect: 0
+  m_OverrideGazeTimeToSelect: 0
+  m_GazeTimeToSelect: 0.5
+  m_OverrideTimeToAutoDeselectGaze: 0
+  m_TimeToAutoDeselectGaze: 3
+  m_AllowGazeAssistance: 0
+  m_FirstHoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastHoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_HoverExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstSelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastSelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_SelectExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FirstFocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_LastFocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusEntered:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FocusExited:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Activated:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1374034055}
+        m_TargetAssemblyTypeName: DrinkSource, Assembly-CSharp
+        m_MethodName: Toggle
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  m_Deactivated:
+    m_PersistentCalls:
+      m_Calls: []
+  m_StartingHoverFilters: []
+  m_StartingSelectFilters: []
+  m_StartingInteractionStrengthFilters: []
+  pivot: {fileID: 0}
+  localAxis: {x: 1, y: 0, z: 0}
+  minAngle: 0
+  maxAngle: 60
+  springBack: 1
+  springSpeed: 240
+  pourThreshold: 0.5
+  stopThreshold: 0.4
+  hapticsEnabled: 1
+  minAmplitude: 0.04
+  maxAmplitude: 0.55
+  rumbleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  pulseInterval: 0.06
+  pourClickAmplitude: 0.7
+  limitClickAmplitude: 0.9
+  clickDuration: 0.05
+  onPourStart:
+    m_PersistentCalls:
+      m_Calls: []
+  onPourStop:
+    m_PersistentCalls:
+      m_Calls: []
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 265760665}
+        m_TargetAssemblyTypeName: TapFlow, Assembly-CSharp
+        m_MethodName: SetFlow
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1451398814
 GameObject:
   m_ObjectHideFlags: 0

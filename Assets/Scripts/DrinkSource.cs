@@ -15,7 +15,7 @@ public class DrinkSource : MonoBehaviour
 
     void Awake()
     {
-        if (stream == null) stream = GetComponentInChildren<ParticleSystem>();
+        
         SetPouring(false);
     }
 
