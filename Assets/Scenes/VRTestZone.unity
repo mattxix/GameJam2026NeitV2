@@ -119,11 +119,14 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+<<<<<<< HEAD
 --- !u!4 &62075413 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8382483008344818684, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
   m_PrefabInstance: {fileID: 265618247}
   m_PrefabAsset: {fileID: 0}
+=======
+>>>>>>> parent of 759d60e (Push)
 --- !u!1001 &164259885
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -6371,10 +6374,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: DrinkVR (17)
       objectReference: {fileID: 0}
+<<<<<<< HEAD
     - target: {fileID: 4070687325246617266, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+=======
+>>>>>>> parent of 759d60e (Push)
     - target: {fileID: 4778219600372978081, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 2.394
@@ -6417,6 +6423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
+<<<<<<< HEAD
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 4778219600372978081, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: 1
@@ -6424,6 +6431,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4778219600372978081, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: 2
       addedObject: {fileID: 705489062}
+=======
+    m_AddedGameObjects: []
+>>>>>>> parent of 759d60e (Push)
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
 --- !u!1 &695856669
@@ -6929,6 +6939,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 262207808}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+<<<<<<< HEAD
 --- !u!1 &1374034051 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 270461332519800360, guid: 59a23ca4676f597439b3eaf2740e699e, type: 3}
@@ -6948,6 +6959,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   drink: 0
   stream: {fileID: 265760664}
+=======
+>>>>>>> parent of 759d60e (Push)
 --- !u!1 &1451398814
 GameObject:
   m_ObjectHideFlags: 0
@@ -13143,5 +13156,8 @@ SceneRoots:
   - {fileID: 164259885}
   - {fileID: 1971536903}
   - {fileID: 265618247}
+<<<<<<< HEAD
   - {fileID: 1630214050}
   - {fileID: 182789357}
+=======
+>>>>>>> parent of 759d60e (Push)
