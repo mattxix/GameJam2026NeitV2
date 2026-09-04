@@ -45,6 +45,8 @@ GameObject:
   - component: {fileID: 1806841664550647272}
   - component: {fileID: 3258396158274215469}
   - component: {fileID: 5763054201510220449}
+  - component: {fileID: 1083923566151882407}
+  - component: {fileID: 3733443302692952955}
   m_Layer: 0
   m_Name: DrinkVR
   m_TagString: Drink
@@ -80,6 +82,7 @@ Transform:
   - {fileID: 7122844364359888265}
   - {fileID: 1837992314039671062}
   - {fileID: 7532999344475262411}
+  - {fileID: 972474199982110795}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4552143427484658233
@@ -111,7 +114,6 @@ MonoBehaviour:
   - {fileID: 3425968891690852985}
   - {fileID: 6184157176524047171}
   liquid: {fileID: 2181369169148936527}
-  ice: {fileID: 4070687325246617266}
   poison: {fileID: 6133935862590613381}
 --- !u!54 &1806841664550647272
 Rigidbody:
@@ -307,6 +309,44 @@ CapsuleCollider:
   m_Height: 0.642329
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!135 &1083923566151882407
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597400024762629052}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0.21, z: 0}
+--- !u!114 &3733443302692952955
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597400024762629052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5d20611e0aa60254780429e51e24a386, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  iceCubePrefab: {fileID: 6227888014384792595, guid: e599ed1c9d9f50541bc78084d03976eb, type: 3}
+  iceAnchor: {fileID: 972474199982110795}
+  cubeSpacing: 0.03
+  fillRadius: 0.022
+  capacity: 4
 --- !u!1 &936902002015843504
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,6 +511,37 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &3201333323699013705
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 972474199982110795}
+  m_Layer: 0
+  m_Name: IceAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &972474199982110795
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3201333323699013705}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.1214, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4778219600372978081}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3425968891690852985
 GameObject:
   m_ObjectHideFlags: 0

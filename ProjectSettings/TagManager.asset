@@ -13,6 +13,7 @@ TagManager:
   - Feather
   - Accessory
   - Chair
+  - IceBin
   layers:
   - Default
   - TransparentFX
@@ -24,7 +25,6 @@ TagManager:
   - ViewportItem
   - FillGlass
   - iceBin
-  - 
   - 
   - 
   - 
