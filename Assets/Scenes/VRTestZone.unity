@@ -6828,7 +6828,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: e15ba19e01995bb4dae5897df210faea, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7511558181221131132, guid: e15ba19e01995bb4dae5897df210faea, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
@@ -7910,6 +7910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1607501439}
   - component: {fileID: 1607501440}
+  - component: {fileID: 1607501441}
   m_Layer: 8
   m_Name: DrinkFillCollider
   m_TagString: Untagged
@@ -7953,6 +7954,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.25, y: 0.008158286, z: 0.25}
   m_Center: {x: 0, y: 0.010307034, z: 0}
+--- !u!114 &1607501441
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1607501438}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 566c28def3a63894aa8e33f284c1221a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  liquid: {fileID: 705489064}
+  fillPerParticle: 0.005
+  maxFillPerFrame: 0.08
 --- !u!1 &1630214048
 GameObject:
   m_ObjectHideFlags: 0

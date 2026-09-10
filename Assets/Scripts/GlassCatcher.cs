@@ -49,6 +49,7 @@ public class GlassCatcher : MonoBehaviour
 
     void OnParticleCollision(GameObject other)
     {
+        Debug.Log($"[Catcher] hit by {other.name}, liquid={(liquid ? liquid.name : "NULL")}");
         if (liquid == null || liquid.IsFull) return;
 
         var ps = other.GetComponent<ParticleSystem>();
