@@ -4,6 +4,13 @@ using UnityEngine;
 /// <summary>
 /// Drives the Custom/DrinkLiquid shader. Put this on the liquid mesh
 /// (a cylinder sitting inside the glass), not on the glass itself.
+///
+/// The liquid is modelled as a cylinder of radius rimRadius between
+/// bottomOffset and topOffset along the glass axis. Each frame the horizontal
+/// clip plane is solved so it encloses exactly fill * (full volume), whatever
+/// the tilt — so tipping the glass never makes the drink appear to grow or
+/// shrink. Pouring uses the same solve: liquid leaves when that plane sits
+/// above the low edge of the rim.
 /// </summary>
 [RequireComponent(typeof(MeshRenderer))]
 [RequireComponent(typeof(MeshFilter))]
@@ -27,14 +34,12 @@ public class LiquidGlass : MonoBehaviour
         [ColorUsage(true, true)] public Color foam;
     }
 
-    /// <summary>Parses "RRGGBBAA" into a Color. Used only for the default presets below.</summary>
     static Color Hex(string hex)
     {
         ColorUtility.TryParseHtmlString("#" + hex, out Color c);
         return c;
     }
 
-    /// <summary>Lightens a colour toward white and makes it opaque. Used for surface / foam tints.</summary>
     static Color Lighten(Color c, float t)
     {
         Color r = Color.Lerp(c, Color.white, t);
@@ -43,37 +48,56 @@ public class LiquidGlass : MonoBehaviour
     }
 
     [Header("Drink presets — index must match the Drink enum order")]
-    public DrinkStyle[] styles = new DrinkStyle[]    
+    public DrinkStyle[] styles = new DrinkStyle[]
     {
-        new DrinkStyle { name = "OldHouseGin",     liquid = Hex("AF72397F"), surface = Lighten(Hex("AF72397F"), 0.30f), foam = Lighten(Hex("AF72397F"), 0.65f) },
-        new DrinkStyle { name = "MidnightTonic",   liquid = Hex("003AFF7F"), surface = Lighten(Hex("003AFF7F"), 0.30f), foam = Lighten(Hex("003AFF7F"), 0.65f) },
-        new DrinkStyle { name = "CrimsonHighball", liquid = Hex("FF00007F"), surface = Lighten(Hex("FF00007F"), 0.30f), foam = Lighten(Hex("FF00007F"), 0.65f) },
-        new DrinkStyle { name = "EmeraldFizz",     liquid = Hex("00FF157F"), surface = Lighten(Hex("00FF157F"), 0.30f), foam = Lighten(Hex("00FF157F"), 0.65f) },
-        new DrinkStyle { name = "StillCrystal",    liquid = Hex("9CB6CC7F"), surface = Lighten(Hex("9CB6CC7F"), 0.30f), foam = Lighten(Hex("9CB6CC7F"), 0.65f) },
+            new DrinkStyle { name = "OldHouseGin",     liquid = Hex("AF72397F"), surface = Lighten(Hex("AF72397F"), 0.30f), foam = Lighten(Hex("AF72397F"), 0.65f) },
+            new DrinkStyle { name = "MidnightTonic",   liquid = Hex("003AFF7F"), surface = Lighten(Hex("003AFF7F"), 0.30f), foam = Lighten(Hex("003AFF7F"), 0.65f) },
+            new DrinkStyle { name = "CrimsonHighball", liquid = Hex("FF00007F"), surface = Lighten(Hex("FF00007F"), 0.30f), foam = Lighten(Hex("FF00007F"), 0.65f) },
+            new DrinkStyle { name = "EmeraldFizz",     liquid = Hex("00FF157F"), surface = Lighten(Hex("00FF157F"), 0.30f), foam = Lighten(Hex("00FF157F"), 0.65f) },
+            new DrinkStyle { name = "StillCrystal",    liquid = Hex("9CB6CC7F"), surface = Lighten(Hex("9CB6CC7F"), 0.30f), foam = Lighten(Hex("9CB6CC7F"), 0.65f) },
+
     };
 
     [Header("State")]
     [SerializeField] Drink currentDrink = Drink.OldHouseGin;
     [Range(0f, 1f)][SerializeField] float fill = 0f;
-    [Tooltip("Stop short of the very top so the mesh's top cap never shows.")]
-    [Range(0.8f, 1f)] public float maxFill = 0.95f;
+    [Tooltip("Cap on how full the tap can make it. Lower this if a full glass " +
+             "spills too easily when picked up — a real pint isn't filled to the brim.")]
+    [Range(0.5f, 1f)] public float maxFill = 0.9f;
+
+    [Header("Glass shape")]
+    [Tooltip("INTERIOR radius of the glass in metres. This is real geometry now, " +
+             "not a sensitivity dial — it drives both the volume calculation and " +
+             "when tipping starts a pour. A pint glass is about 0.035.")]
+    public float rimRadius = 0.035f;
+
+    [Tooltip("Whose 'up' is the glass axis. Assign the glass ROOT. " +
+             "Falls back to this object's up if empty.")]
+    public Transform tiltReference;
+
+    [Tooltip("Ignore the mesh bounds and use the two values below. Turn this on " +
+             "when the liquid only appears across part of the 0-1 fill range.")]
+    public bool useManualBounds = false;
+
+    [Tooltip("Inside bottom of the glass, in metres along the axis from this object's pivot.")]
+    public float manualBottomOffset = 0f;
+
+    [Tooltip("Rim of the glass, in metres along the axis from this object's pivot.")]
+    public float manualTopOffset = 0.175f;
 
     [Header("Wobble")]
-    [Tooltip("How far the surface can tilt when sloshing.")]
     public float maxWobble = 0.05f;
-    [Tooltip("Oscillations per second.")]
     public float wobbleSpeed = 1.2f;
-    [Tooltip("How fast the slosh settles down.")]
     public float recovery = 1.6f;
 
     [Header("Pouring")]
     public bool autoPourWhenTipped = true;
     [Tooltip("Fill fraction drained per second at a full tip.")]
-    public float pourRate = 0.9f;
-    [Tooltip("Radius of the glass rim. Auto-measured on Awake if left at 0.")]
-    public float rimRadius = 0f;
+    public float pourRate = 1.2f;
+    [Tooltip("Ignore tilts smaller than this, so hand tremor doesn't dribble.")]
+    public float tiltDeadzoneDeg = 3f;
 
-    /// <summary>Fires every frame liquid leaves the glass. (drink, amount of fill lost)</summary>
+    /// <summary>Fires every frame liquid leaves the glass. (drink, fill lost)</summary>
     public event Action<Drink, float> OnPour;
     /// <summary>Fires once when the glass runs dry.</summary>
     public event Action OnEmptied;
@@ -88,26 +112,33 @@ public class LiquidGlass : MonoBehaviour
     MeshRenderer rend;
     MaterialPropertyBlock mpb;
 
-    // Mesh extents, in world units, measured from the pivot.
-    float bottomOffset, topOffset, meshTopLocalY;
+    // Axis extents from the pivot, in metres along the glass axis.
+    float bottomOffset, topOffset;
 
-    // Runtime colours (separate from the presets so drinks can be mixed).
+    // Tilt of the glass axis: cos = dot(axis, world up), sin from that.
+    float cosT = 1f, sinT = 0f;
+
+    // Last solved clip plane, as a world-Y offset from the pivot.
+    float planeHeight;
+
     Color liquidColor, surfaceColor, foamColor;
 
     Vector3 lastPos;
     Quaternion lastRot;
     float wobbleTargetX, wobbleTargetZ, wobbleTime;
-    float CurrentWobbleX, CurrentWobbleZ;
+    float wobbleX, wobbleZ;
+
+    // ---------- Public API ----------
 
     public float Fill
     {
         get => fill;
         set
         {
-            bool wasFull = fill > 0f;
+            bool had = fill > 0f;
             fill = Mathf.Clamp(value, 0f, maxFill);
             Apply();
-            if (wasFull && fill <= 0f) OnEmptied?.Invoke();
+            if (had && fill <= 0f) OnEmptied?.Invoke();
         }
     }
 
@@ -115,129 +146,10 @@ public class LiquidGlass : MonoBehaviour
     public bool IsEmpty => fill <= 0.001f;
     public bool IsFull => fill >= maxFill - 0.001f;
 
-    void Awake()
-    {
-        rend = GetComponent<MeshRenderer>();
-        mpb = new MaterialPropertyBlock();
-        Measure();
-        SetDrink(currentDrink);
-        lastPos = transform.position;
-        lastRot = transform.rotation;
-        Apply();
-    }
-
-    void Measure()
-    {
-        var mesh = GetComponent<MeshFilter>().sharedMesh;
-        if (mesh == null) return;
-
-        Bounds b = mesh.bounds;                    // local space
-        Vector3 scale = transform.lossyScale;
-        meshTopLocalY = b.max.y;
-        bottomOffset = b.min.y * scale.y;
-        topOffset = b.max.y * scale.y;
-
-        if (rimRadius <= 0f)
-            rimRadius = b.extents.x * Mathf.Max(scale.x, scale.z);
-    }
-
-    void Update()
-    {
-        float dt = Time.deltaTime;
-        if (dt <= 0f) return;
-
-        UpdateWobble(dt);
-        if (autoPourWhenTipped) UpdatePour(dt);
-        Apply();
-
-        lastPos = transform.position;
-        lastRot = transform.rotation;
-    }
-
-    void UpdateWobble(float dt)
-    {
-        wobbleTime += dt;
-
-        // Decay whatever slosh energy is left.
-        wobbleTargetX = Mathf.Lerp(wobbleTargetX, 0f, dt * recovery);
-        wobbleTargetZ = Mathf.Lerp(wobbleTargetZ, 0f, dt * recovery);
-
-        Vector3 velocity = (transform.position - lastPos) / dt;
-
-        // Stable angular velocity (no 0/360 wrap-around glitches).
-        Quaternion delta = transform.rotation * Quaternion.Inverse(lastRot);
-        delta.ToAngleAxis(out float angle, out Vector3 axis);
-        if (angle > 180f) angle -= 360f;
-        if (float.IsNaN(axis.x)) axis = Vector3.zero;
-        Vector3 angularVelocity = axis * (angle * Mathf.Deg2Rad / dt);
-
-        // Linear motion along an axis, plus rotation about the perpendicular axis,
-        // both push the surface the same direction.
-        wobbleTargetX += Mathf.Clamp((velocity.x + angularVelocity.z * 0.2f) * maxWobble, -maxWobble, maxWobble);
-        wobbleTargetZ += Mathf.Clamp((velocity.z - angularVelocity.x * 0.2f) * maxWobble, -maxWobble, maxWobble);
-        wobbleTargetX = Mathf.Clamp(wobbleTargetX, -maxWobble, maxWobble);
-        wobbleTargetZ = Mathf.Clamp(wobbleTargetZ, -maxWobble, maxWobble);
-
-        float pulse = 2f * Mathf.PI * wobbleSpeed;
-        CurrentWobbleX = wobbleTargetX * Mathf.Sin(pulse * wobbleTime);
-        CurrentWobbleZ = wobbleTargetZ * Mathf.Cos(pulse * wobbleTime);
-    }
-
-    void UpdatePour(float dt)
-    {
-        if (IsEmpty) return;
-
-        // Lowest point of the rim, in world space.
-        float tilt = Vector3.Angle(transform.up, Vector3.up) * Mathf.Deg2Rad;
-        Vector3 rimCenter = transform.TransformPoint(new Vector3(0f, meshTopLocalY, 0f));
-        float lowestRimY = rimCenter.y - rimRadius * Mathf.Sin(tilt);
-
-        // Height of the liquid surface, in world space.
-        float surfaceY = transform.position.y + Mathf.Lerp(bottomOffset, topOffset, fill);
-
-        float overflow = surfaceY - lowestRimY;
-        if (overflow <= 0f) return;
-
-        float height = Mathf.Max(topOffset - bottomOffset, 1e-4f);
-        float severity = Mathf.Clamp01(overflow / height * 3f);
-        float amount = Mathf.Min(fill, pourRate * severity * dt);
-
-        fill -= amount;
-        OnPour?.Invoke(currentDrink, amount);
-        if (fill <= 0f) { fill = 0f; OnEmptied?.Invoke(); }
-    }
-
-    /// <summary>
-    /// Colours set through a MaterialPropertyBlock are handed to the GPU untouched,
-    /// unlike colours assigned in the material inspector. In a Linear-space project
-    /// we have to do the sRGB conversion ourselves or everything renders washed out.
-    /// </summary>
-    static Color ToShaderColor(Color c)
-    {
-        if (QualitySettings.activeColorSpace != ColorSpace.Linear) return c;
-        Color linear = c.linear;
-        linear.a = c.a;   // only RGB is gamma-encoded; alpha passes through
-        return linear;
-    }
-
-    void Apply()
-    {
-        if (rend == null) return;
-
-        rend.enabled = !IsEmpty;
-        if (!rend.enabled) return;
-
-        rend.GetPropertyBlock(mpb);
-        mpb.SetFloat(FillID, Mathf.Lerp(bottomOffset, topOffset, fill));
-        mpb.SetFloat(WobbleXID, CurrentWobbleX);
-        mpb.SetFloat(WobbleZID, CurrentWobbleZ);
-        mpb.SetColor(TintID, ToShaderColor(liquidColor));
-        mpb.SetColor(TopID, ToShaderColor(surfaceColor));
-        mpb.SetColor(FoamID, ToShaderColor(foamColor));
-        rend.SetPropertyBlock(mpb);
-    }
-
-    // ---------- Public API ----------
+    /// <summary>World height of the liquid surface as last solved.</summary>
+    public float SurfaceWorldY => transform.position.y + planeHeight;
+    public float BottomWorldY => transform.position.y + bottomOffset * cosT;
+    public float TopWorldY => transform.position.y + topOffset * cosT;
 
     public void SetDrink(Drink drink)
     {
@@ -249,7 +161,7 @@ public class LiquidGlass : MonoBehaviour
         Apply();
     }
 
-    /// <summary>Call this from a tap. Adopts the drink if empty, blends colours if mixing.</summary>
+    /// <summary>Call from a tap. Adopts the drink if empty, blends colours if mixing.</summary>
     public void FillFrom(Drink drink, float amount)
     {
         if (amount <= 0f) return;
@@ -270,22 +182,237 @@ public class LiquidGlass : MonoBehaviour
         Fill = fill + amount;
     }
 
-    public void Empty()
+    public void Empty() => Fill = 0f;
+
+    // ---------- Lifecycle ----------
+
+    void Awake()
     {
-        Fill = 0f;
+        rend = GetComponent<MeshRenderer>();
+        mpb = new MaterialPropertyBlock();
+        Measure();
+        SetDrink(currentDrink);
+        lastPos = transform.position;
+        lastRot = transform.rotation;
+        Apply();
+    }
+
+    void Measure()
+    {
+        var mf = GetComponent<MeshFilter>();
+        if (mf != null && mf.sharedMesh != null)
+        {
+            Bounds b = mf.sharedMesh.bounds;
+            float s = transform.lossyScale.y;
+            bottomOffset = b.min.y * s;
+            topOffset = b.max.y * s;
+        }
+
+        if (useManualBounds)
+        {
+            bottomOffset = manualBottomOffset;
+            topOffset = manualTopOffset;
+        }
+
+        if (topOffset <= bottomOffset)
+            Debug.LogError($"{name}: topOffset ({topOffset:F4}) must be above bottomOffset " +
+                           $"({bottomOffset:F4}). Fix the bounds.", this);
+    }
+
+    void Update()
+    {
+        float dt = Time.deltaTime;
+        if (dt <= 0f) return;
+
+        UpdateWobble(dt);
+        if (autoPourWhenTipped) UpdatePour(dt);
+        Apply();
+
+        lastPos = transform.position;
+        lastRot = transform.rotation;
+    }
+
+    void UpdateWobble(float dt)
+    {
+        wobbleTime += dt;
+
+        wobbleTargetX = Mathf.Lerp(wobbleTargetX, 0f, dt * recovery);
+        wobbleTargetZ = Mathf.Lerp(wobbleTargetZ, 0f, dt * recovery);
+
+        Vector3 velocity = (transform.position - lastPos) / dt;
+
+        Quaternion delta = transform.rotation * Quaternion.Inverse(lastRot);
+        delta.ToAngleAxis(out float angle, out Vector3 axis);
+        if (angle > 180f) angle -= 360f;
+        if (float.IsNaN(axis.x)) axis = Vector3.zero;
+        Vector3 angularVelocity = axis * (angle * Mathf.Deg2Rad / dt);
+
+        wobbleTargetX += Mathf.Clamp((velocity.x + angularVelocity.z * 0.2f) * maxWobble, -maxWobble, maxWobble);
+        wobbleTargetZ += Mathf.Clamp((velocity.z - angularVelocity.x * 0.2f) * maxWobble, -maxWobble, maxWobble);
+        wobbleTargetX = Mathf.Clamp(wobbleTargetX, -maxWobble, maxWobble);
+        wobbleTargetZ = Mathf.Clamp(wobbleTargetZ, -maxWobble, maxWobble);
+
+        float pulse = 2f * Mathf.PI * wobbleSpeed;
+        wobbleX = wobbleTargetX * Mathf.Sin(pulse * wobbleTime);
+        wobbleZ = wobbleTargetZ * Mathf.Cos(pulse * wobbleTime);
+    }
+
+    void UpdatePour(float dt)
+    {
+        if (IsEmpty) return;
+
+        ComputeTilt();
+        float tiltDeg = Mathf.Acos(Mathf.Clamp(cosT, -1f, 1f)) * Mathf.Rad2Deg;
+        if (tiltDeg < tiltDeadzoneDeg) return;
+
+        float plane = SolvePlaneHeight();
+
+        // Lowest point of the rim circle, as a world-Y offset from the pivot.
+        float lowestRim = topOffset * cosT - rimRadius * sinT;
+
+        float overflow = plane - lowestRim;
+        if (overflow <= 0f) return;
+
+        // Floor the rate so the last dribble doesn't take forever.
+        float severity = Mathf.Clamp(overflow / Mathf.Max(rimRadius, 1e-4f), 0.15f, 1f);
+        float amount = Mathf.Min(fill, pourRate * severity * dt);
+
+        fill -= amount;
+        if (fill < 0.01f) fill = 0f;
+
+        OnPour?.Invoke(currentDrink, amount);
+        if (fill <= 0f) OnEmptied?.Invoke();
+    }
+
+    // ---------- Volume solve ----------
+
+    void ComputeTilt()
+    {
+        Vector3 up = tiltReference != null ? tiltReference.up : transform.up;
+        cosT = Mathf.Clamp(Vector3.Dot(up, Vector3.up), -1f, 1f);
+        sinT = Mathf.Sqrt(Mathf.Max(0f, 1f - cosT * cosT));
+    }
+
+    /// <summary>Area of a disc of radius r on the side x &lt;= t.</summary>
+    static float SegmentArea(float r, float t)
+    {
+        if (t <= -r) return 0f;
+        if (t >= r) return Mathf.PI * r * r;
+        return r * r * Mathf.Acos(-t / r) + t * Mathf.Sqrt(r * r - t * t);
+    }
+
+    /// <summary>Integral of SegmentArea from -r up to t.</summary>
+    static float SegmentAreaIntegral(float r, float t)
+    {
+        if (t <= -r) return 0f;
+        if (t >= r) return Mathf.PI * r * r * r + Mathf.PI * r * r * (t - r);
+        float r2 = r * r;
+        float q = r2 - t * t;
+        float sq = Mathf.Sqrt(q);
+        return r2 * t * Mathf.Acos(-t / r) + r2 * sq - q * sq / 3f;
+    }
+
+    /// <summary>
+    /// Volume of the tilted cylinder that lies below a horizontal plane at
+    /// world-Y offset h from the pivot. Exact for a cylinder; glasses that
+    /// taper will be slightly off, which nobody will notice.
+    /// </summary>
+    float VolumeBelow(float h)
+    {
+        float H = topOffset - bottomOffset;
+        float r = rimRadius;
+
+        // Axis vertical (upright or inverted): plain height clamp.
+        if (sinT < 1e-4f)
+        {
+            float len = cosT > 0f
+                ? h / cosT - bottomOffset
+                : H - (h / cosT - bottomOffset);
+            return Mathf.PI * r * r * Mathf.Clamp(len, 0f, H);
+        }
+
+        // For a slice at axis position s, its centre sits at world-Y
+        // (bottomOffset + s) * cosT. Points on that slice are below the plane
+        // where their in-slice coordinate x <= t(s) = (h - centreY) / sinT.
+        float t0 = (h - bottomOffset * cosT) / sinT;
+        float t1 = (h - (bottomOffset + H) * cosT) / sinT;
+
+        // Axis horizontal: every slice has the same chord.
+        if (Mathf.Abs(cosT) < 1e-4f)
+            return H * SegmentArea(r, t0);
+
+        // t is linear in s with dt/ds = -cosT/sinT, so
+        // V = ∫ A(t(s)) ds = (sinT / cosT) * (F(t0) - F(t1)).
+        return (sinT / cosT) * (SegmentAreaIntegral(r, t0) - SegmentAreaIntegral(r, t1));
+    }
+
+    /// <summary>
+    /// Finds the plane height enclosing fill * fullVolume at the current tilt.
+    /// Volume is monotonic in h, so a bisection converges reliably.
+    /// </summary>
+    float SolvePlaneHeight()
+    {
+        float H = topOffset - bottomOffset;
+        float r = rimRadius;
+        float target = Mathf.Clamp01(fill) * Mathf.PI * r * r * H;
+
+        float aLo = bottomOffset * cosT;
+        float aHi = topOffset * cosT;
+        float lo = Mathf.Min(aLo, aHi) - r * sinT;
+        float hi = Mathf.Max(aLo, aHi) + r * sinT;
+
+        for (int i = 0; i < 28; i++)
+        {
+            float mid = 0.5f * (lo + hi);
+            if (VolumeBelow(mid) < target) lo = mid; else hi = mid;
+        }
+        return 0.5f * (lo + hi);
+    }
+
+    // ---------- Rendering ----------
+
+    static Color ToShaderColor(Color c)
+    {
+        if (QualitySettings.activeColorSpace != ColorSpace.Linear) return c;
+        Color l = c.linear;
+        l.a = c.a;
+        return l;
+    }
+
+    void Apply()
+    {
+        if (rend == null) return;
+
+        rend.enabled = !IsEmpty;
+        if (!rend.enabled) return;
+
+        ComputeTilt();
+        planeHeight = SolvePlaneHeight();
+
+        rend.GetPropertyBlock(mpb);
+        mpb.SetFloat(FillID, planeHeight);
+        mpb.SetFloat(WobbleXID, wobbleX);
+        mpb.SetFloat(WobbleZID, wobbleZ);
+        mpb.SetColor(TintID, ToShaderColor(liquidColor));
+        mpb.SetColor(TopID, ToShaderColor(surfaceColor));
+        mpb.SetColor(FoamID, ToShaderColor(foamColor));
+        rend.SetPropertyBlock(mpb);
     }
 
 #if UNITY_EDITOR
     void OnValidate()
     {
-        if (!Application.isPlaying)
+        if (Application.isPlaying) return;
+
+        UnityEditor.EditorApplication.delayCall += () =>
         {
+            if (this == null) return;
             rend = GetComponent<MeshRenderer>();
             if (mpb == null) mpb = new MaterialPropertyBlock();
             Measure();
             SetDrink(currentDrink);
             Apply();
-        }
+        };
     }
 #endif
 }

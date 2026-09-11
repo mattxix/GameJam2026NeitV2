@@ -19,7 +19,7 @@ using UnityEngine;
 ///   - Lifetime Loss: 1                 (particle dies on contact)
 ///   - Collides With: only the DrinkCatcher layer
 /// </summary>
-[RequireComponent(typeof(Collider))]
+
 public class GlassCatcher : MonoBehaviour
 {
     [Tooltip("The liquid mesh this catcher feeds. Auto-found in parents if left empty.")]
@@ -28,6 +28,10 @@ public class GlassCatcher : MonoBehaviour
     [Tooltip("Fill fraction added per particle caught. " +
              "Rough calibration: 1 / (emission rate * seconds to fill).")]
     public float fillPerParticle = 0.005f;
+
+    [Tooltip("Fill fraction added per second while the stream is landing. " +
+            "Used when the per-particle event list comes back empty.")]
+    public float fillRatePerSecond = 0.25f;
 
     [Tooltip("Safety cap so a burst of particles in one frame can't jump the level.")]
     public float maxFillPerFrame = 0.08f;
@@ -39,16 +43,15 @@ public class GlassCatcher : MonoBehaviour
 
     void Awake()
     {
-        if (liquid == null) liquid = GetComponentInParent<LiquidGlass>();
+        if (liquid == null) liquid = GetComponentInChildren<LiquidGlass>();
 
-        var col = GetComponent<Collider>();
-        if (col.isTrigger)
-            Debug.LogWarning($"{name}: catcher collider is a trigger. " +
-                             "Particles ignore triggers — uncheck Is Trigger.", this);
+        if (liquid == null)
+            Debug.LogError($"{name}: no LiquidGlass found — assign it manually.", this);
     }
 
     void OnParticleCollision(GameObject other)
     {
+        
         if (liquid == null || liquid.IsFull) return;
 
         var ps = other.GetComponent<ParticleSystem>();
@@ -56,14 +59,29 @@ public class GlassCatcher : MonoBehaviour
 
         // How many particles from this system hit us this frame.
         int count = ParticlePhysicsExtensions.GetCollisionEvents(ps, gameObject, events);
-        if (count <= 0) return;
+        //Debug.Log($"[Catcher] count={count} fill={liquid.Fill:F3}");
 
-        // The tap tells us which drink it is; fall back to whatever is in the glass.
         var source = other.GetComponentInParent<DrinkSource>();
         LiquidGlass.Drink drink = source != null ? source.drink : liquid.CurrentDrink;
 
-        float amount = Mathf.Min(count * fillPerParticle, maxFillPerFrame);
+        float amount = count > 0
+            ? Mathf.Min(count * fillPerParticle, maxFillPerFrame)
+            : fillRatePerSecond * Time.deltaTime;
+
+        //Debug
+        //for (int i = 0; i < count; i++)
+        //{
+        //    Vector3 p = events[i].intersection;
+        //    Collider hit = events[i].colliderComponent as Collider;
+        //    Debug.Log($"[Catcher] hit '{(hit ? hit.name : "null")}' " +
+        //              $"layer '{(hit ? LayerMask.LayerToName(hit.gameObject.layer) : "?")}' " +
+        //              $"at y={p.y:F3}  (surface y={liquid.SurfaceWorldY:F3}, " +
+        //              $"bottom={liquid.BottomWorldY:F3}, top={liquid.TopWorldY:F3})");
+        //    Debug.DrawRay(p, Vector3.up * 0.05f, Color.red, 2f);
+        //}
         liquid.FillFrom(drink, amount);
         OnCaught?.Invoke(drink, amount);
     }
 }
+    
+
