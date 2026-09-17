@@ -6,18 +6,30 @@ using UnityEngine;
 /// </summary>
 public class DrinkSource : MonoBehaviour
 {
-    public LiquidGlass.Drink drink = LiquidGlass.Drink.OldHouseGin;
+    public LiquidGlass.Drink drink;
 
     [Tooltip("The stream. Left empty, it looks for one on this object or its children.")]
     public ParticleSystem stream;
 
     public bool IsPouring { get; private set; }
 
+    static readonly System.Collections.Generic.Dictionary<ParticleSystem, DrinkSource> byStream = new();
+
+    public static DrinkSource ForStream(ParticleSystem ps)
+        => ps != null && byStream.TryGetValue(ps, out var s) ? s : null;
+
     void Awake()
     {
-        
+        if (stream == null) stream = GetComponentInChildren<ParticleSystem>();
+        if (stream != null) byStream[stream] = this;
         SetPouring(false);
     }
+
+    void OnDestroy()
+    {
+        if (stream != null) byStream.Remove(stream);
+    }
+
 
     public void SetPouring(bool on)
     {

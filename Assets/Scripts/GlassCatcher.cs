@@ -61,7 +61,8 @@ public class GlassCatcher : MonoBehaviour
         int count = ParticlePhysicsExtensions.GetCollisionEvents(ps, gameObject, events);
         //Debug.Log($"[Catcher] count={count} fill={liquid.Fill:F3}");
 
-        var source = other.GetComponentInParent<DrinkSource>();
+        var source = DrinkSource.ForStream(ps) ?? other.GetComponentInParent<DrinkSource>();
+        if (source == null) Debug.LogWarning($"[Catcher] no DrinkSource above '{other.name}'", other);
         LiquidGlass.Drink drink = source != null ? source.drink : liquid.CurrentDrink;
 
         float amount = count > 0
