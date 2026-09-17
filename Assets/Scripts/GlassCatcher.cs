@@ -25,6 +25,9 @@ public class GlassCatcher : MonoBehaviour
     [Tooltip("The liquid mesh this catcher feeds. Auto-found in parents if left empty.")]
     public LiquidGlass liquid;
 
+    [Tooltip("The drink state this catcher doses with poison. Auto-found in parents if left empty.")]
+    public DrinkProperties drink;
+
     [Tooltip("Fill fraction added per particle caught. " +
              "Rough calibration: 1 / (emission rate * seconds to fill).")]
     public float fillPerParticle = 0.005f;
@@ -39,6 +42,9 @@ public class GlassCatcher : MonoBehaviour
     /// <summary>Fires when a particle lands. (drink, amount added) — hook splash FX here.</summary>
     public event System.Action<LiquidGlass.Drink, float> OnCaught;
 
+    /// <summary>Fires the first time poison lands in this glass — hook a sound cue here.</summary>
+    public event System.Action OnPoisoned;
+
     readonly List<ParticleCollisionEvent> events = new List<ParticleCollisionEvent>();
 
     void Awake()
@@ -47,15 +53,31 @@ public class GlassCatcher : MonoBehaviour
 
         if (liquid == null)
             Debug.LogError($"{name}: no LiquidGlass found — assign it manually.", this);
+
+        if (drink == null) drink = GetComponentInParent<DrinkProperties>();
     }
 
     void OnParticleCollision(GameObject other)
     {
-        
-        if (liquid == null || liquid.IsFull) return;
+
+        if (liquid == null) return;
 
         var ps = other.GetComponent<ParticleSystem>();
         if (ps == null) return;
+
+        // Poison doses the drink instead of filling it — colorless, adds no volume.
+        var poison = PoisonSource.ForStream(ps) ?? other.GetComponentInParent<PoisonSource>();
+        if (poison != null)
+        {
+            if (drink != null && !drink.hasPoison)
+            {
+                drink.hasPoison = true;
+                OnPoisoned?.Invoke();
+            }
+            return;
+        }
+
+        if (liquid.IsFull) return;
 
         // How many particles from this system hit us this frame.
         int count = ParticlePhysicsExtensions.GetCollisionEvents(ps, gameObject, events);
@@ -63,7 +85,7 @@ public class GlassCatcher : MonoBehaviour
 
         var source = DrinkSource.ForStream(ps) ?? other.GetComponentInParent<DrinkSource>();
         if (source == null) Debug.LogWarning($"[Catcher] no DrinkSource above '{other.name}'", other);
-        LiquidGlass.Drink drink = source != null ? source.drink : liquid.CurrentDrink;
+        LiquidGlass.Drink drinkType = source != null ? source.drink : liquid.CurrentDrink;
 
         float amount = count > 0
             ? Mathf.Min(count * fillPerParticle, maxFillPerFrame)
@@ -80,9 +102,7 @@ public class GlassCatcher : MonoBehaviour
         //              $"bottom={liquid.BottomWorldY:F3}, top={liquid.TopWorldY:F3})");
         //    Debug.DrawRay(p, Vector3.up * 0.05f, Color.red, 2f);
         //}
-        liquid.FillFrom(drink, amount);
-        OnCaught?.Invoke(drink, amount);
+        liquid.FillFrom(drinkType, amount);
+        OnCaught?.Invoke(drinkType, amount);
     }
 }
-    
-

@@ -70,6 +70,11 @@ public class NapkinServePoint : MonoBehaviour
             return;
         }
 
+        Log("Guest wants. flavor=" + guest.desiredFlavor
+            + " topping=" + guest.desiredTopping
+            + " ice=" + guest.wantsIce
+            + " evil=" + guest.isEvil);
+
         hasServed = true;
         ServeResult result = ServeEvaluator.Evaluate(drink, guest);
         Log("Result: " + result);
