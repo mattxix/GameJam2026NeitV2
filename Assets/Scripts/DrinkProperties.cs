@@ -12,7 +12,10 @@ public class DrinkProperties : MonoBehaviour
     public Material[] drinkMaterials;
     public GameObject[] drinkToppings;
     public GameObject liquid;
-   
+
+    // VR drives visuals through LiquidGlass and sockets, so skip the PC visual code.
+    public bool vrMode;
+
     public GameObject poison;
     private float fillProgress = 0.0f;
 
@@ -61,6 +64,8 @@ public class DrinkProperties : MonoBehaviour
 
     void Update()
     {
+        if (vrMode) return;
+
         if (drinkFlavor == null)
         {
             liquid.SetActive(false);
@@ -108,7 +113,7 @@ public class DrinkProperties : MonoBehaviour
     }
     public void AddPoison()
     {
-        if(topping != null)
+        if (topping != null)
         {
             hasPoison = true;
         }

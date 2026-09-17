@@ -66,7 +66,6 @@ public class WalkToPoints : MonoBehaviour
             }
 
 
-            Debug.Log(currentNodeIndex);
 
 
         }
