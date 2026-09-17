@@ -4,7 +4,6 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEditor.SceneManagement;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
@@ -23,12 +22,14 @@ public class PopupService : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        volume.profile.TryGet(out DOF);
+        if (volume != null && volume.profile != null) volume.profile.TryGet(out DOF);
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (popup == null) return;
+
         float rot = Mathf.Sin(Time.time * .5f) * 2;
         float scale = Mathf.Sin(Time.time * .5f) * .08f;
         popup.transform.rotation = Quaternion.Euler(0, 0, rot);
@@ -37,8 +38,8 @@ public class PopupService : MonoBehaviour
 
     public void RestartScene()
     {
-  
-     
+
+
     }
 
     public void GoToMenu()
@@ -46,13 +47,31 @@ public class PopupService : MonoBehaviour
 
     }
 
-    public IEnumerator PopupMenu(string condition)
+    // PC-only components. Absent in VR, so every lookup is guarded.
+    private void DisablePCPlayerControls()
     {
-        player.GetComponent<FPMovement>().enabled = false;
-        player.GetComponent<MouseLook>().enabled = false;
-        player.transform.Find("Main Camera").GetComponent<MouseLook>().enabled = false;
+        if (player == null) return;
+
+        var movement = player.GetComponent<FPMovement>();
+        if (movement != null) movement.enabled = false;
+
+        var look = player.GetComponent<MouseLook>();
+        if (look != null) look.enabled = false;
+
+        Transform cam = player.transform.Find("Main Camera");
+        if (cam != null)
+        {
+            var camLook = cam.GetComponent<MouseLook>();
+            if (camLook != null) camLook.enabled = false;
+        }
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
+    }
+
+    public IEnumerator PopupMenu(string condition)
+    {
+        DisablePCPlayerControls();
 
         if (condition == "PoisonedInnocent")
         {
@@ -80,17 +99,14 @@ public class PopupService : MonoBehaviour
         {
             if (DOF != null)
             {
-                Debug.Log(DOF.aperture.value);
                 DOF.focalLength.value = Mathf.Lerp(1f, 56f, i / 60);
             }
-               
+
             yield return new WaitForSeconds(0.02f);
         }
 
-       // popup.SetActive(true);
+        // popup.SetActive(true);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-
-
     }
 
     public void ClickRetry()

@@ -10,15 +10,10 @@ public class NapkinServePoint : MonoBehaviour
 {
     [Header("Scene References")]
     [SerializeField] private MaskLogic maskLogic;
-    [SerializeField] private PopupService popupService;
     [SerializeField] private SFXService soundService;
 
     [Header("Lookup")]
     [SerializeField] private string guestsHolderName = "GuestsHolder";
-
-    [Header("Scoring")]
-    [SerializeField] private int strikes;
-    public int Strikes => strikes;
 
     [Header("Debug")]
     [SerializeField] private bool verboseLogging = true;
@@ -45,11 +40,8 @@ public class NapkinServePoint : MonoBehaviour
     {
         Log("Socket fired on napkin " + name);
 
-        if (hasServed)
-        {
-            Log("Bailed: already serving.");
-            return;
-        }
+        if (hasServed) return;
+        if (GameState.Instance != null && GameState.Instance.IsGameOver) return;
 
         GameObject placed = args.interactableObject.transform.gameObject;
         DrinkProperties drink = FindDrink(placed);
@@ -77,11 +69,6 @@ public class NapkinServePoint : MonoBehaviour
             Log("Bailed: no guest named '" + name + "' under " + guestsHolderName);
             return;
         }
-
-        Log("Guest found. wants flavor=" + guest.desiredFlavor
-            + " topping=" + guest.desiredTopping
-            + " ice=" + guest.wantsIce
-            + " evil=" + guest.isEvil);
 
         hasServed = true;
         ServeResult result = ServeEvaluator.Evaluate(drink, guest);
@@ -115,40 +102,40 @@ public class NapkinServePoint : MonoBehaviour
 
     private void Resolve(ServeResult result, NPCData guest, XRGrabInteractable drinkObject)
     {
-        switch (result)
+        if (soundService != null)
         {
-            case ServeResult.Correct:
-                soundService.Glass();
-                break;
-            case ServeResult.EvilPoisoned:
-                soundService.PoisonedGuest(2f);
-                maskLogic.CreateEnemyProfile();
-                break;
-            case ServeResult.EvilNotPoisoned:
-                Fail();
-                maskLogic.CreateEnemyProfile();
-                break;
-            default:
-                Fail();
-                break;
+            switch (result)
+            {
+                case ServeResult.MafiaPoisoned:
+                    soundService.PoisonedGuest(2f);
+                    break;
+                case ServeResult.CivilianPoisoned:
+                    soundService.PoisonedGuest(2f);
+                    break;
+                case ServeResult.WrongOrder:
+                    soundService.Fail(2f);
+                    break;
+                default:
+                    soundService.Glass();
+                    break;
+            }
         }
 
-        if (ServeEvaluator.IsStrike(result)) strikes++;
+        // A spared target keeps their profile live so they can return later.
+        if (result == ServeResult.MafiaSpared && maskLogic != null)
+            maskLogic.TargetEscaped();
 
-        int guestIndex;
-        if (int.TryParse(name, out guestIndex)) maskLogic.curGuest = guestIndex;
-        maskLogic.numGuests--;
+        // GameState owns strikes, score, and the lose conditions.
+        if (GameState.Instance != null) GameState.Instance.ReportServe(result);
+
+        int slot;
+        if (int.TryParse(name, out slot) && maskLogic != null)
+            maskLogic.ReleaseGuest(slot);
 
         Destroy(guest.gameObject);
         if (drinkObject != null) Destroy(drinkObject.gameObject);
 
         hasServed = false;
-    }
-
-    private void Fail()
-    {
-        soundService.Fail(2f);
-        StartCoroutine(popupService.PopupMenu("TEMP"));
     }
 
     private void Log(string message)

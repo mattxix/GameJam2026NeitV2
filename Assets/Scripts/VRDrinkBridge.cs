@@ -99,11 +99,18 @@ public class VRDrinkBridge : MonoBehaviour
         drink.topping = null;
     }
 
-    // Instantiated toppings carry a "(Clone)" suffix that won't match NPCData.
+    // VR topping prefabs carry suffixes ("(Clone)", ".VR") that won't match NPCData.
     private static string CleanName(string raw)
     {
-        int clone = raw.IndexOf("(Clone)", StringComparison.Ordinal);
-        return clone >= 0 ? raw.Substring(0, clone).Trim() : raw.Trim();
+        string clean = raw;
+
+        int clone = clean.IndexOf("(Clone)", StringComparison.Ordinal);
+        if (clone >= 0) clean = clean.Substring(0, clone);
+
+        int suffix = clean.IndexOf(".VR", StringComparison.OrdinalIgnoreCase);
+        if (suffix >= 0) clean = clean.Substring(0, suffix);
+
+        return clean.Trim();
     }
 
     // Call this from the poison bottle when it pours into the glass.

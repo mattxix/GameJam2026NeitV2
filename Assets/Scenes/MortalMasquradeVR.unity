@@ -2020,6 +2020,10 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 6e9391f8a99f5af4e921807d0bd5b394, type: 2}
   - {fileID: 2100000, guid: 138ebe06fb2ff9d4a93d7269865ca7b3, type: 2}
   GuestSpawnPoint: {fileID: 146793322}
+  maxGuests: 5
+  minSpawnDelay: 5
+  maxSpawnDelay: 15
+  mafiaSpawnChance: 20
   viewportHolder: {fileID: 1212610813}
   curGuest: 0
   numGuests: 0
@@ -2049,10 +2053,6 @@ PrefabInstance:
     - target: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_Name
       value: DrinkVR (17)
-      objectReference: {fileID: 0}
-    - target: {fileID: 4552143427484658233, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
-      propertyPath: vrMode
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4778219600372978081, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_LocalPosition.x
@@ -6625,6 +6625,55 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1257659460}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2075147465
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2075147467}
+  - component: {fileID: 2075147466}
+  m_Layer: 0
+  m_Name: GameState
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2075147466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075147465}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5047c6c99cfc8848850ad6540c50de1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStrikes: 3
+  strikes: 0
+  mafiaKilled: 0
+  popupService: {fileID: 1528983107}
+  maskLogic: {fileID: 424707559}
+--- !u!4 &2075147467
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2075147465}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.91700035, y: 1.268769, z: 1.4770002}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2094841378 stripped
 GameObject:
@@ -39069,10 +39118,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maskLogic: {fileID: 424707559}
-  popupService: {fileID: 1528983107}
   soundService: {fileID: 1201581355}
   guestsHolderName: GuestsHolder
-  strikes: 0
   verboseLogging: 1
 --- !u!135 &8747371643733651863
 SphereCollider:
@@ -39124,19 +39171,7 @@ MonoBehaviour:
       m_Calls: []
   m_SelectEntered:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5077281274094490738}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
   m_SelectExited:
     m_PersistentCalls:
       m_Calls: []
@@ -40237,3 +40272,4 @@ SceneRoots:
   - {fileID: 1695018359}
   - {fileID: 323012141}
   - {fileID: 1201581357}
+  - {fileID: 2075147467}

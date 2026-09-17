@@ -48,6 +48,7 @@ GameObject:
   - component: {fileID: 1083923566151882407}
   - component: {fileID: 3733443302692952955}
   - component: {fileID: 3987799427872854723}
+  - component: {fileID: 7657934260935894674}
   m_Layer: 0
   m_Name: DrinkVR
   m_TagString: Drink
@@ -113,6 +114,7 @@ MonoBehaviour:
   - {fileID: 3425968891690852985}
   - {fileID: 6184157176524047171}
   liquid: {fileID: 2181369169148936527}
+  vrMode: 1
   poison: {fileID: 6133935862590613381}
 --- !u!54 &1806841664550647272
 Rigidbody:
@@ -364,6 +366,33 @@ MonoBehaviour:
   fillPerParticle: 0.005
   fillRatePerSecond: 0.25
   maxFillPerFrame: 0.08
+--- !u!114 &7657934260935894674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597400024762629052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 066ff7876384ecd44bfc2c6c62b9bfea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  liquid: {fileID: 1243778797464376770}
+  iceReceiver: {fileID: 3733443302692952955}
+  toppingSocket: {fileID: 7036205841618331234}
+  flavorMap:
+  - drink: 0
+    flavorName: Old House Gin
+  - drink: 1
+    flavorName: Midnight Tonic
+  - drink: 2
+    flavorName: Crimson Highball
+  - drink: 3
+    flavorName: Emerald Fizz
+  - drink: 4
+    flavorName: Still Crystal
+  minFillToCount: 0.15
 --- !u!1 &936902002015843504
 GameObject:
   m_ObjectHideFlags: 0
