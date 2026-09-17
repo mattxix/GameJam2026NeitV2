@@ -194,6 +194,7 @@ public class LiquidGlass : MonoBehaviour
         SetDrink(currentDrink);
         lastPos = transform.position;
         lastRot = transform.rotation;
+
         Apply();
     }
 
