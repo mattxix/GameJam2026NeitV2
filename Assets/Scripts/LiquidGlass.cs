@@ -71,6 +71,17 @@ public class LiquidGlass : MonoBehaviour
              "when tipping starts a pour. A pint glass is about 0.035.")]
     public float rimRadius = 0.035f;
 
+    [Header("Neck (bottles) — leave off for open-top glasses")]
+    [Tooltip("The opening is a narrow neck above the body, not the top of the liquid.")]
+    public bool hasNeck = false;
+
+    [Tooltip("INTERIOR radius of the neck opening, in metres.")]
+    public float neckRadius = 0.012f;
+
+    [Tooltip("Height of the neck OPENING along the axis from this object's pivot. " +
+             "Measure to the lip you actually pour over, not the top of the body.")]
+    public float neckTopOffset = 0.14f;
+
     [Tooltip("Whose 'up' is the glass axis. Assign the glass ROOT. " +
              "Falls back to this object's up if empty.")]
     public Transform tiltReference;
@@ -268,14 +279,15 @@ public class LiquidGlass : MonoBehaviour
 
         float plane = SolvePlaneHeight();
 
-        // Lowest point of the rim circle, as a world-Y offset from the pivot.
-        float lowestRim = topOffset * cosT - rimRadius * sinT;
+        // Lowest point of the opening, as a world-Y offset from the pivot.
+        float openingHeight = hasNeck ? neckTopOffset : topOffset;
+        float openingRadius = hasNeck ? neckRadius : rimRadius;
+        float lowestRim = openingHeight * cosT - openingRadius * sinT;
 
         float overflow = plane - lowestRim;
         if (overflow <= 0f) return;
 
-        // Floor the rate so the last dribble doesn't take forever.
-        float severity = Mathf.Clamp(overflow / Mathf.Max(rimRadius, 1e-4f), 0.15f, 1f);
+        float severity = Mathf.Clamp(overflow / Mathf.Max(openingRadius, 1e-4f), 0.15f, 1f);
         float amount = Mathf.Min(fill, pourRate * severity * dt);
 
         fill -= amount;

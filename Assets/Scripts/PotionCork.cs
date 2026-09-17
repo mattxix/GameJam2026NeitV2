@@ -3,33 +3,24 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.XR.Interaction.Toolkit.Interactables;
 
 /// Cork starts parented to the bottle (kinematic, rides along).
-/// First grab pops it off into world space; on release it becomes a normal physics object.
+/// First grab unparents it and turns its Rigidbody on.
 [RequireComponent(typeof(XRGrabInteractable), typeof(Rigidbody))]
 public class PotionCork : MonoBehaviour
 {
-    
-
-    [Tooltip("Seconds after pulling the cork before it can collide with the bottle again.")]
-    [SerializeField] float collisionReenableDelay = 0.5f;
-
     XRGrabInteractable grab;
     Rigidbody rb;
-    Collider[] corkColliders;
     bool detached;
 
     void Awake()
     {
         grab = GetComponent<XRGrabInteractable>();
         rb = GetComponent<Rigidbody>();
-        corkColliders = GetComponentsInChildren<Collider>();
 
-        // Don't snap back under the bottle when dropped.
-        grab.retainTransformParent = false;
+        grab.retainTransformParent = false; // don't re-parent to the bottle on drop
 
-        // Seated: follow the bottle's transform, no physics.
+        // Seated: ride along with the bottle, no physics.
         rb.isKinematic = true;
         rb.useGravity = false;
-        SetBottleCollision(false);
 
         grab.selectEntered.AddListener(OnGrabbed);
         grab.selectExited.AddListener(OnReleased);
@@ -46,27 +37,20 @@ public class PotionCork : MonoBehaviour
         if (detached) return;
         detached = true;
 
-        // XRI normally unparents on grab already; this just guarantees it.
         transform.SetParent(null, true);
-        Invoke(nameof(RestoreBottleCollision), collisionReenableDelay);
+        EnablePhysics();
     }
 
     void OnReleased(SelectExitEventArgs args)
     {
-        if (grab.isSelected) return; // still held by the other hand
-
-        // XRI restores the kinematic state from grab time during Drop,
-        // which runs before this event — so override it here.
-        rb.isKinematic = false;
-        rb.useGravity = true;
+        // XRI restores the kinematic state it saw at grab time (true on the
+        // first grab), so re-enable physics here as well.
+        if (!grab.isSelected) EnablePhysics();
     }
 
-    void RestoreBottleCollision() => SetBottleCollision(true);
-
-    void SetBottleCollision(bool enabled)
+    void EnablePhysics()
     {
-       // foreach (var c in corkColliders)
-            //foreach (var b in bottleColliders)
-                //if (c && b) Physics.IgnoreCollision(c, b, !enabled);
+        rb.isKinematic = false;
+        rb.useGravity = true;
     }
 }
