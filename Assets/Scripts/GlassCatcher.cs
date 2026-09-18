@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,7 +41,8 @@ public class GlassCatcher : MonoBehaviour
 
     [Tooltip("Safety cap so a burst of particles in one frame can't jump the level.")]
     public float maxFillPerFrame = 0.08f;
-    
+
+    public Transform poisonPuffPoint;
 
     /// <summary>Fires when a particle lands. (drink, amount added) — hook splash FX here.</summary>
     public event System.Action<LiquidGlass.Drink, float> OnCaught;
@@ -75,16 +77,35 @@ public class GlassCatcher : MonoBehaviour
             if (drink != null && !drink.hasPoison)
             {
                 drink.hasPoison = true;
-
-                if (poisonParticles != null)
-                {
-                    poisonParticles.gameObject.SetActive(true);
-                    poisonParticles.Play(true);               // true = include children/sub-emitters
-                }
-                else Debug.LogWarning($"{name}: poisonParticles not assigned", this);
                 OnPoisoned?.Invoke();
+                StartCoroutine(PoisonPuff());
             }
             return;
+        }
+
+        IEnumerator PoisonPuff()
+        {
+
+            if (poisonParticles != null)
+            {
+                // Snap the system to the marker before it emits.
+                if (poisonPuffPoint != null)
+                {
+                    poisonParticles.transform.SetPositionAndRotation(
+                        poisonPuffPoint.position, poisonPuffPoint.rotation);
+                }
+
+                poisonParticles.gameObject.SetActive(true);
+                yield return null;              // let the activation land before playing
+
+                poisonParticles.Clear(true);    // drop any stale particles from a previous puff
+                poisonParticles.Play(true);
+            }
+
+            yield return new WaitForSeconds(2f);
+
+            if (poisonParticles != null)
+                poisonParticles.Stop(true, ParticleSystemStopBehavior.StopEmitting);
         }
 
         if (liquid.IsFull) return;

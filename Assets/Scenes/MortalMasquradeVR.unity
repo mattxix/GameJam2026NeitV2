@@ -7049,6 +7049,10 @@ PrefabInstance:
       propertyPath: poisonParticles
       value: 
       objectReference: {fileID: 1332420440}
+    - target: {fileID: 3987799427872854723, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: poisonPuffPoint
+      value: 
+      objectReference: {fileID: 919868291}
     - target: {fileID: 4022579095550780474, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_IsActive
       value: 0
@@ -7166,6 +7170,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4778219600372978081, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: 14
       addedObject: {fileID: 352734928}
+    - targetCorrespondingSourceObject: {fileID: 4778219600372978081, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 919868291}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: -1
@@ -8488,6 +8495,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 708724449596242057}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &919868290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 919868291}
+  m_Layer: 0
+  m_Name: PoisonPuffTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &919868291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919868290}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.149, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1077494432}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &973230144
 GameObject:
   m_ObjectHideFlags: 0
@@ -9677,7 +9715,7 @@ ParticleSystem:
   ringBufferMode: 0
   ringBufferLoopRange: {x: 0, y: 1}
   emitterVelocityMode: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 0
   useUnscaledTime: 0
