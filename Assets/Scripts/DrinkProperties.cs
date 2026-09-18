@@ -17,6 +17,7 @@ public class DrinkProperties : MonoBehaviour
     public bool vrMode;
 
     public GameObject poison;
+    public ParticleSystem poisonParticles;
     private float fillProgress = 0.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -113,10 +114,13 @@ public class DrinkProperties : MonoBehaviour
     }
     public void AddPoison()
     {
-        if (topping != null)
+
+        hasPoison = true;
+        if (poisonParticles != null)
         {
-            hasPoison = true;
+            poisonParticles.Play();
         }
+
     }
 
     public void PourDrink(string drinkLiquid)
