@@ -118,6 +118,10 @@ public class DrinkProperties : MonoBehaviour
         
         hasPoison = true;
 
+        if (topping != null)
+        {
+            hasPoison = true;
+        }
     }
 
     public void PourDrink(string drinkLiquid)
