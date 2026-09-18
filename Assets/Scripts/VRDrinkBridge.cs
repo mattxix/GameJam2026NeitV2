@@ -113,9 +113,5 @@ public class VRDrinkBridge : MonoBehaviour
         return clean.Trim();
     }
 
-    // Call this from the poison bottle when it pours into the glass.
-    public void ApplyPoison()
-    {
-        drink.AddPoison();
-    }
+   
 }

@@ -22,6 +22,8 @@ using UnityEngine;
 
 public class GlassCatcher : MonoBehaviour
 {
+    public ParticleSystem poisonParticles;
+
     [Tooltip("The liquid mesh this catcher feeds. Auto-found in parents if left empty.")]
     public LiquidGlass liquid;
 
@@ -38,6 +40,7 @@ public class GlassCatcher : MonoBehaviour
 
     [Tooltip("Safety cap so a burst of particles in one frame can't jump the level.")]
     public float maxFillPerFrame = 0.08f;
+    
 
     /// <summary>Fires when a particle lands. (drink, amount added) — hook splash FX here.</summary>
     public event System.Action<LiquidGlass.Drink, float> OnCaught;
@@ -72,6 +75,13 @@ public class GlassCatcher : MonoBehaviour
             if (drink != null && !drink.hasPoison)
             {
                 drink.hasPoison = true;
+
+                if (poisonParticles != null)
+                {
+                    poisonParticles.gameObject.SetActive(true);
+                    poisonParticles.Play(true);               // true = include children/sub-emitters
+                }
+                else Debug.LogWarning($"{name}: poisonParticles not assigned", this);
                 OnPoisoned?.Invoke();
             }
             return;

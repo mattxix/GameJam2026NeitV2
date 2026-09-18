@@ -13,11 +13,12 @@ public class DrinkProperties : MonoBehaviour
     public GameObject[] drinkToppings;
     public GameObject liquid;
 
+
     // VR drives visuals through LiquidGlass and sockets, so skip the PC visual code.
     public bool vrMode;
 
     public GameObject poison;
-    public ParticleSystem poisonParticles;
+    
     private float fillProgress = 0.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -114,12 +115,8 @@ public class DrinkProperties : MonoBehaviour
     }
     public void AddPoison()
     {
-
+        
         hasPoison = true;
-        if (poisonParticles != null)
-        {
-            poisonParticles.Play();
-        }
 
     }
 
