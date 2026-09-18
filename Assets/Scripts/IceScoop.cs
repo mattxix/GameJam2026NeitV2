@@ -44,11 +44,19 @@ public class IceScoop : MonoBehaviour
             return;
         }
 
+        // Cubes inherit anchor scale otherwise, so the glass and scoop disagree.
+        Vector3 prefabScale = iceCubePrefab.transform.localScale;
+        Vector3 anchorScale = iceAnchor.lossyScale;
+
         for (int i = 0; i < capacity; i++)
         {
             GameObject cube = Instantiate(iceCubePrefab, iceAnchor);
             cube.transform.localPosition = SlotPosition(i);
             cube.transform.localRotation = Random.rotation;
+            cube.transform.localScale = new Vector3(
+                prefabScale.x / Mathf.Max(anchorScale.x, 1e-4f),
+                prefabScale.y / Mathf.Max(anchorScale.y, 1e-4f),
+                prefabScale.z / Mathf.Max(anchorScale.z, 1e-4f));
             cube.SetActive(false);
             pool.Add(cube);
         }
@@ -102,6 +110,13 @@ public class IceScoop : MonoBehaviour
     {
         if (other.TryGetComponent(out GlassIceReceiver glass))
             nearbyGlasses.Remove(glass);
+    }
+
+    // Temporary: reports what the scoop is actually touching.
+    private void OnTriggerStay(Collider other)
+    {
+        if (Time.frameCount % 60 != 0) return;
+        Debug.Log("[Scoop] touching " + other.name + " tagged '" + other.tag + "' — ice=" + currentIce, this);
     }
 
     private void Update()
