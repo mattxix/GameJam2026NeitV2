@@ -41,11 +41,19 @@ public class GlassIceReceiver : MonoBehaviour
             return;
         }
 
+        // Cubes inherit anchor scale otherwise, so the glass and scoop disagree.
+        Vector3 prefabScale = iceCubePrefab.transform.localScale;
+        Vector3 anchorScale = iceAnchor.lossyScale;
+
         for (int i = 0; i < capacity; i++)
         {
             GameObject cube = Instantiate(iceCubePrefab, iceAnchor);
             cube.transform.localPosition = SlotPosition(i);
             cube.transform.localRotation = Random.rotation;
+            cube.transform.localScale = new Vector3(
+                prefabScale.x / Mathf.Max(anchorScale.x, 1e-4f),
+                prefabScale.y / Mathf.Max(anchorScale.y, 1e-4f),
+                prefabScale.z / Mathf.Max(anchorScale.z, 1e-4f));
             cube.SetActive(false);
             pool.Add(cube);
         }
