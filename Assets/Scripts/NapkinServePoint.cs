@@ -133,12 +133,22 @@ public class NapkinServePoint : MonoBehaviour
         // GameState owns strikes, score, and the lose conditions.
         if (GameState.Instance != null) GameState.Instance.ReportServe(result);
 
-        int slot;
-        if (int.TryParse(name, out slot) && maskLogic != null)
-            maskLogic.ReleaseGuest(slot);
-
-        Destroy(guest.gameObject);
+        // Glass goes now so it can't be pulled back off the napkin and served again.
         if (drinkObject != null) Destroy(drinkObject.gameObject);
+
+        int slot;
+        if (!int.TryParse(name, out slot)) slot = -1;
+
+        // Feedback holds the guest in their seat long enough to read the result.
+        if (ServeFeedback.Instance != null)
+        {
+            ServeFeedback.Instance.Play(guest, result, slot);
+        }
+        else
+        {
+            if (slot >= 0 && maskLogic != null) maskLogic.ReleaseGuest(slot);
+            Destroy(guest.gameObject);
+        }
 
         hasServed = false;
     }
