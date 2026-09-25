@@ -51182,7 +51182,7 @@ GameObject:
   - component: {fileID: 8710580405899009149}
   - component: {fileID: 5615262994035617776}
   - component: {fileID: 5271531438336197374}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: IceBin
   m_TagString: IceBin
   m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
