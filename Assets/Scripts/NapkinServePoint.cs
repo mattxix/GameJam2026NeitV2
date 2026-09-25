@@ -134,8 +134,8 @@ public class NapkinServePoint : MonoBehaviour
         // GameState owns strikes, score, and the lose conditions.
         if (GameState.Instance != null) GameState.Instance.ReportServe(result);
 
-        // Glass goes now so it can't be pulled back off the napkin and served again.
-        if (drinkObject != null) Destroy(drinkObject.gameObject);
+        // Glass goes now, garnishes and all, so it can't be pulled back off the napkin and served again.
+        if (drinkObject != null) DestroyWithToppings(drinkObject);
 
         int slot;
         if (!int.TryParse(name, out slot)) slot = -1;
@@ -152,6 +152,22 @@ public class NapkinServePoint : MonoBehaviour
         }
 
         hasServed = false;
+    }
+
+    // Garnishes ride in the glass's sockets rather than as children, so they'd be
+    // left floating when the glass goes. Take them with it.
+    private static void DestroyWithToppings(XRGrabInteractable glass)
+    {
+        var sockets = glass.GetComponentsInChildren<XRSocketInteractor>();
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            var held = sockets[i].interactablesSelected;
+            for (int j = 0; j < held.Count; j++)
+            {
+                if (held[j] != null) Destroy(held[j].transform.gameObject);
+            }
+        }
+        Destroy(glass.gameObject);
     }
 
     private void Log(string message)
