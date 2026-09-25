@@ -126,21 +126,48 @@ public class NapkinServePoint : MonoBehaviour
             }
         }
 
-        // A spared target keeps their profile live so they can return later.
-        if (result == ServeResult.MafiaSpared && maskLogic != null)
-            maskLogic.TargetEscaped();
+        // Any mafia leaving the bar - killed, spared, or refused - takes their
+        // profile with them, so the sheet always shows a live target.
+        if (guest.isEvil && maskLogic != null)
+            maskLogic.RetireCurrentTarget();
 
         // GameState owns strikes, score, and the lose conditions.
         if (GameState.Instance != null) GameState.Instance.ReportServe(result);
 
-        int slot;
-        if (int.TryParse(name, out slot) && maskLogic != null)
-            maskLogic.ReleaseGuest(slot);
+        // Glass goes now, garnishes and all, so it can't be pulled back off the napkin and served again.
+        if (drinkObject != null) DestroyWithToppings(drinkObject);
 
-        Destroy(guest.gameObject);
-        if (drinkObject != null) Destroy(drinkObject.gameObject);
+        int slot;
+        if (!int.TryParse(name, out slot)) slot = -1;
+
+        // Feedback holds the guest in their seat long enough to read the result.
+        if (ServeFeedback.Instance != null)
+        {
+            ServeFeedback.Instance.Play(guest, result, slot);
+        }
+        else
+        {
+            if (slot >= 0 && maskLogic != null) maskLogic.ReleaseGuest(slot);
+            Destroy(guest.gameObject);
+        }
 
         hasServed = false;
+    }
+
+    // Garnishes ride in the glass's sockets rather than as children, so they'd be
+    // left floating when the glass goes. Take them with it.
+    private static void DestroyWithToppings(XRGrabInteractable glass)
+    {
+        var sockets = glass.GetComponentsInChildren<XRSocketInteractor>();
+        for (int i = 0; i < sockets.Length; i++)
+        {
+            var held = sockets[i].interactablesSelected;
+            for (int j = 0; j < held.Count; j++)
+            {
+                if (held[j] != null) Destroy(held[j].transform.gameObject);
+            }
+        }
+        Destroy(glass.gameObject);
     }
 
     private void Log(string message)

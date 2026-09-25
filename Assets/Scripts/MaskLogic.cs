@@ -20,13 +20,18 @@ public class MaskLogic : MonoBehaviour
     [SerializeField, Min(1)] private int maxGuests = 5;
     [SerializeField] private float minSpawnDelay = 5f;
     [SerializeField] private float maxSpawnDelay = 15f;
-    [Tooltip("Percent chance a spawning guest is mafia, when no mafia is present.")]
-    [SerializeField, Range(0, 100)] private int mafiaSpawnChance = 20;
+
+    [Header("Mafia")]
+    [Tooltip("Percent chance each spawning guest is mafia, whenever no mafia is at the bar.")]
+    [SerializeField, Range(0, 100)] private int mafiaChancePercent = 15;
+
+    // Cap on target rerolls. With ~60 combinations and at most a few guests, it's never reached in practice.
+    private const int ProfileRollLimit = 64;
 
     private int evilMaskBase;
     private int evilAccessory;
     private int evilColor;
-    private bool evilInScene;
+    private bool hasProfile;
 
     public Transform viewportHolder;
 
@@ -35,6 +40,8 @@ public class MaskLogic : MonoBehaviour
 
     // Which seat indices are occupied. Frees correctly when any guest leaves.
     private readonly HashSet<int> occupiedSlots = new HashSet<int>();
+
+    private Transform guestsHolder;
 
     // Colors available for masks
     public enum MaskColor
@@ -49,6 +56,15 @@ public class MaskLogic : MonoBehaviour
 
     void Start()
     {
+        GameObject holder = GameObject.Find("GuestsHolder");
+        if (holder == null)
+        {
+            Debug.LogError("MaskLogic: no GuestsHolder in the scene.", this);
+            enabled = false;
+            return;
+        }
+        guestsHolder = holder.transform;
+
         CreateEnemyProfile();
         SpawnGuestWithMask();
         StartCoroutine(NPCSpawning());
@@ -98,6 +114,41 @@ public class MaskLogic : MonoBehaviour
         return -1;
     }
 
+    // Read from the guests actually present, so every exit path clears it:
+    // poisoned, spared, refused a wrong drink, or removed any other way.
+    private bool MafiaPresent()
+    {
+        for (int i = 0; i < guestsHolder.childCount; i++)
+        {
+            var npc = guestsHolder.GetChild(i).GetComponent<NPCData>();
+            if (npc != null && npc.isEvil) return true;
+        }
+        return false;
+    }
+
+    // True if anyone at the bar wears exactly this mask, color, and accessory.
+    private bool MatchesGuestAtBar(int mask, int color, int accessory)
+    {
+        if (guestsHolder == null) return false;
+        for (int i = 0; i < guestsHolder.childCount; i++)
+        {
+            var npc = guestsHolder.GetChild(i).GetComponent<NPCData>();
+            if (npc != null && npc.maskType == mask && npc.maskColor == color && npc.accessory == accessory)
+                return true;
+        }
+        return false;
+    }
+
+    // Flat chance on every spawn. The only exception is the original one-target-at-a-time
+    // rule, since the sheet can only show one target.
+    private bool RollMafia(bool mafiaAtBar)
+    {
+        if (mafiaAtBar) return false;
+
+        // Strict < so the Inspector value is the real percentage.
+        return Random.Range(0, 100) < mafiaChancePercent;
+    }
+
     // Called when a guest is removed for any reason - served, poisoned, or timed out.
     public void ReleaseGuest(int slot)
     {
@@ -106,25 +157,33 @@ public class MaskLogic : MonoBehaviour
         curGuest = slot;
     }
 
-    // The target was killed, so a new mafia profile can appear at the ball.
+    // A mafia member left the bar, so a fresh target goes on the sheet.
     public void RetireCurrentTarget()
     {
-        evilInScene = false;
         CreateEnemyProfile();
-    }
-
-    // The target left alive, so the same profile stays valid and can return.
-    public void TargetEscaped()
-    {
-        evilInScene = false;
     }
 
 
     public void CreateEnemyProfile()
     {
-        evilMaskBase = RandomMask();
-        evilColor = RandomMaskColor();
-        evilAccessory = RandomAccessory();
+        int oldMask = evilMaskBase;
+        int oldColor = evilColor;
+        int oldAccessory = evilAccessory;
+
+        // Reroll until the target differs from the last one and matches nobody
+        // already at the bar, so the sheet never points at an innocent.
+        for (int attempt = 0; attempt < ProfileRollLimit; attempt++)
+        {
+            evilMaskBase = RandomMask();
+            evilColor = RandomMaskColor();
+            evilAccessory = RandomAccessory();
+
+            bool sameAsOld = hasProfile
+                && evilMaskBase == oldMask && evilColor == oldColor && evilAccessory == oldAccessory;
+
+            if (!sameAsOld && !MatchesGuestAtBar(evilMaskBase, evilColor, evilAccessory)) break;
+        }
+        hasProfile = true;
 
         foreach (Transform _maskTransform in viewportHolder.Find("Masks").transform)
         {
@@ -164,17 +223,23 @@ public class MaskLogic : MonoBehaviour
         int slot = NextFreeSlot();
         if (slot < 0) return;
 
+        bool spawnMafia = RollMafia(MafiaPresent());
+
         int guestIndex = Random.Range(0, guestPrefabs.Length);
-        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, GameObject.Find("GuestsHolder").transform);
+        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, guestsHolder);
         guest.name = slot.ToString();
 
-        if (Random.Range(0, 100) <= mafiaSpawnChance && !evilInScene)
+        NPCData npc = guest.GetComponent<NPCData>();
+
+        // Set explicitly on both paths - a prefab with Is Evil ticked would otherwise
+        // turn every civilian into a hidden target.
+        npc.isEvil = spawnMafia;
+
+        if (spawnMafia)
         {
-            evilInScene = true;
-            guest.GetComponent<NPCData>().isEvil = true;
-            guest.GetComponent<NPCData>().maskType = evilMaskBase;
-            guest.GetComponent<NPCData>().maskColor = evilColor;
-            guest.GetComponent<NPCData>().accessory = evilAccessory;
+            npc.maskType = evilMaskBase;
+            npc.maskColor = evilColor;
+            npc.accessory = evilAccessory;
 
             GameObject mask = guest.transform.Find("Masks").Find(evilMaskBase.ToString()).gameObject;
             mask.SetActive(true);
@@ -204,18 +269,18 @@ public class MaskLogic : MonoBehaviour
 
             GameObject mask = guest.transform.Find("Masks").Find(maskIndex.ToString()).gameObject;
             mask.SetActive(true);
-            guest.GetComponent<NPCData>().maskType = maskIndex;
+            npc.maskType = maskIndex;
 
             Renderer renderer = mask.GetComponent<Renderer>();
             if (renderer != null)
             {
                 renderer.material = maskMaterials[mat];
             }
-            guest.GetComponent<NPCData>().maskColor = mat;//int.Parse(mat.name);
+            npc.maskColor = mat;//int.Parse(mat.name);
 
             GameObject acc = guest.transform.Find("Accessories").Find(accIndex.ToString()).gameObject;
             acc.SetActive(true);
-            guest.GetComponent<NPCData>().accessory = accIndex;
+            npc.accessory = accIndex;
 
         }
 
