@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.Events;
 
 /// <summary>
 /// The 12 tutorial panels, in order. The number is the panel's slot in the
@@ -25,7 +24,7 @@ public enum TutorialStep
 /// Shows one tutorial panel at a time. The scene starts with panel 0 on and
 /// every other panel off. Completing the current task, or pressing Skip Task,
 /// turns the current panel off and the next one on. Advancing past the last
-/// panel ends the tutorial.
+/// panel, or pressing Exit Tutorial, ends the tutorial the same way.
 /// </summary>
 public class TutorialManager : MonoBehaviour
 {
@@ -43,16 +42,6 @@ public class TutorialManager : MonoBehaviour
              "so one trigger pull (or a task finishing on the same frame as a Skip) " +
              "can't jump two panels.")]
     [SerializeField] private float advanceCooldown = 0.3f;
-
-    [Header("Events")]
-    [Tooltip("Fires every time a new panel turns on. Passes the panel index (0-11).")]
-    public UnityEvent<int> onPanelChanged;
-
-    [Tooltip("Fires after the last panel, when the tutorial is done.")]
-    public UnityEvent onTutorialFinished;
-
-    [Tooltip("Fires when the player presses Exit Tutorial.")]
-    public UnityEvent onTutorialExited;
 
     /// <summary>Index of the panel that's showing, or -1 if the tutorial isn't running.</summary>
     public int CurrentIndex { get; private set; } = -1;
@@ -122,13 +111,13 @@ public class TutorialManager : MonoBehaviour
         Advance();
     }
 
-    /// <summary>Exit Tutorial button. Turns every panel off and ends the tutorial.</summary>
+    /// <summary>
+    /// Exit Tutorial button. Ends the tutorial exactly the same way as
+    /// finishing the last panel: every panel turns off.
+    /// </summary>
     public void ExitTutorial()
     {
-        if (!IsRunning) return;
-        HideAll();
-        CurrentIndex = -1;
-        onTutorialExited?.Invoke();
+        EndTutorial();
     }
 
     // ------------------------------------------------------------------
@@ -144,7 +133,7 @@ public class TutorialManager : MonoBehaviour
         int next = CurrentIndex + 1;
         if (next >= panels.Length)
         {
-            FinishTutorial();
+            EndTutorial();
             return;
         }
         ShowPanel(next);
@@ -163,15 +152,14 @@ public class TutorialManager : MonoBehaviour
             panels[index].SetActive(true);
         else
             Debug.LogWarning($"[Tutorial] Panel slot {index} is empty in the TutorialManager.", this);
-
-        onPanelChanged?.Invoke(index);
     }
 
-    private void FinishTutorial()
+    /// <summary>Shared by finishing and exiting: turn everything off and stop.</summary>
+    private void EndTutorial()
     {
+        if (!IsRunning) return;
         HideAll();
         CurrentIndex = -1;
-        onTutorialFinished?.Invoke();
     }
 
     private void HideAll()
