@@ -6864,10 +6864,9 @@ MonoBehaviour:
   - {fileID: 2100000, guid: 138ebe06fb2ff9d4a93d7269865ca7b3, type: 2}
   GuestSpawnPoint: {fileID: 146793322}
   maxGuests: 5
-  minSpawnDelay: 10
-  maxSpawnDelay: 15
-  mafiaSpawnChance: 20
-  guaranteeMafiaAfter: 4
+  minSpawnDelay: 30
+  maxSpawnDelay: 35
+  mafiaChancePercent: 15
   viewportHolder: {fileID: 1212610813}
   curGuest: 0
   numGuests: 0
@@ -16137,7 +16136,6 @@ MonoBehaviour:
   strikes: 0
   mafiaKilled: 0
   popupService: {fileID: 1528983107}
-  maskLogic: {fileID: 424707559}
 --- !u!4 &2075147467
 Transform:
   m_ObjectHideFlags: 0
