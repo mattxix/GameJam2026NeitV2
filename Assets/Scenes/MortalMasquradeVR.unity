@@ -10778,6 +10778,65 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1063360288}
   m_CullTransparentMesh: 1
+--- !u!1 &1064969526
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1064969527}
+  - component: {fileID: 1064969528}
+  m_Layer: 0
+  m_Name: StrikeRow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1064969527
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064969526}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7085820093606597003}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: -105}
+  m_SizeDelta: {x: 150, y: 42}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1064969528
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1064969526}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f3c046a72a260a4e97e902702b92a39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  boxSprite: {fileID: 21300000, guid: 0384fb7194faf4c4bb8b5b3498e6276c, type: 3}
+  stampSprite: {fileID: 21300000, guid: ef3d285aa487af94d9ef4a50fd425045, type: 3}
+  gapFraction: 0.25
+  stampScale: 1.05
+  punchDuration: 0.18
+  punchStartScale: 1.8
+  maxTilt: 12
+  maxOffset: 0.06
+  stampSound: {fileID: 0}
+  stampVolume: 0.8
+  fallbackSlots: 3
 --- !u!1 &1084185842
 GameObject:
   m_ObjectHideFlags: 0
@@ -52511,6 +52570,7 @@ RectTransform:
   m_Children:
   - {fileID: 570123324913937995}
   - {fileID: 8603871022561342418}
+  - {fileID: 1064969527}
   m_Father: {fileID: 5647075379904698338}
   m_LocalEulerAnglesHint: {x: 9.464, y: 0, z: -2.358}
   m_AnchorMin: {x: 0, y: 0}
