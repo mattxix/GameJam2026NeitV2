@@ -20,10 +20,10 @@ public class MaskLogic : MonoBehaviour
     [SerializeField, Min(1)] private int maxGuests = 5;
     [SerializeField] private float minSpawnDelay = 5f;
     [SerializeField] private float maxSpawnDelay = 15f;
-    [Tooltip("Percent chance a spawning guest is mafia, when no mafia is present.")]
-    [SerializeField, Range(0, 100)] private int mafiaSpawnChance = 20;
-    [Tooltip("After this many civilians in a row with no mafia at the bar, the next guest is guaranteed mafia.")]
-    [SerializeField, Min(1)] private int guaranteeMafiaAfter = 4;
+
+    [Header("Mafia")]
+    [Tooltip("Percent chance each spawning guest is mafia, whenever no mafia is at the bar.")]
+    [SerializeField, Range(0, 100)] private int mafiaChancePercent = 15;
 
     // Cap on target rerolls. With ~60 combinations and at most a few guests, it's never reached in practice.
     private const int ProfileRollLimit = 64;
@@ -32,9 +32,6 @@ public class MaskLogic : MonoBehaviour
     private int evilAccessory;
     private int evilColor;
     private bool hasProfile;
-
-    // Civilians spawned back to back while no target was at the bar.
-    private int civiliansSinceMafia;
 
     public Transform viewportHolder;
 
@@ -142,6 +139,16 @@ public class MaskLogic : MonoBehaviour
         return false;
     }
 
+    // Flat chance on every spawn. The only exception is the original one-target-at-a-time
+    // rule, since the sheet can only show one target.
+    private bool RollMafia(bool mafiaAtBar)
+    {
+        if (mafiaAtBar) return false;
+
+        // Strict < so the Inspector value is the real percentage.
+        return Random.Range(0, 100) < mafiaChancePercent;
+    }
+
     // Called when a guest is removed for any reason - served, poisoned, or timed out.
     public void ReleaseGuest(int slot)
     {
@@ -216,23 +223,23 @@ public class MaskLogic : MonoBehaviour
         int slot = NextFreeSlot();
         if (slot < 0) return;
 
-        // Strict < so the Inspector value is the real percentage.
-        bool mafiaAtBar = MafiaPresent();
-        bool spawnMafia = !mafiaAtBar
-            && (Random.Range(0, 100) < mafiaSpawnChance || civiliansSinceMafia >= guaranteeMafiaAfter);
+        bool spawnMafia = RollMafia(MafiaPresent());
 
         int guestIndex = Random.Range(0, guestPrefabs.Length);
         GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, guestsHolder);
         guest.name = slot.ToString();
 
+        NPCData npc = guest.GetComponent<NPCData>();
+
+        // Set explicitly on both paths - a prefab with Is Evil ticked would otherwise
+        // turn every civilian into a hidden target.
+        npc.isEvil = spawnMafia;
+
         if (spawnMafia)
         {
-            civiliansSinceMafia = 0;
-
-            guest.GetComponent<NPCData>().isEvil = true;
-            guest.GetComponent<NPCData>().maskType = evilMaskBase;
-            guest.GetComponent<NPCData>().maskColor = evilColor;
-            guest.GetComponent<NPCData>().accessory = evilAccessory;
+            npc.maskType = evilMaskBase;
+            npc.maskColor = evilColor;
+            npc.accessory = evilAccessory;
 
             GameObject mask = guest.transform.Find("Masks").Find(evilMaskBase.ToString()).gameObject;
             mask.SetActive(true);
@@ -249,9 +256,6 @@ public class MaskLogic : MonoBehaviour
         }
         else
         {
-            // Only a dry spell with no target at the bar counts toward the guarantee.
-            if (!mafiaAtBar) civiliansSinceMafia++;
-
             // Civilians may share any one trait with the target, never all three,
             // so the player has to read the whole mask instead of one giveaway.
             int maskIndex, mat, accIndex;
@@ -265,18 +269,18 @@ public class MaskLogic : MonoBehaviour
 
             GameObject mask = guest.transform.Find("Masks").Find(maskIndex.ToString()).gameObject;
             mask.SetActive(true);
-            guest.GetComponent<NPCData>().maskType = maskIndex;
+            npc.maskType = maskIndex;
 
             Renderer renderer = mask.GetComponent<Renderer>();
             if (renderer != null)
             {
                 renderer.material = maskMaterials[mat];
             }
-            guest.GetComponent<NPCData>().maskColor = mat;//int.Parse(mat.name);
+            npc.maskColor = mat;//int.Parse(mat.name);
 
             GameObject acc = guest.transform.Find("Accessories").Find(accIndex.ToString()).gameObject;
             acc.SetActive(true);
-            guest.GetComponent<NPCData>().accessory = accIndex;
+            npc.accessory = accIndex;
 
         }
 
