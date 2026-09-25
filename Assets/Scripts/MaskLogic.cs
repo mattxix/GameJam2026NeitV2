@@ -25,9 +25,13 @@ public class MaskLogic : MonoBehaviour
     [Tooltip("After this many civilians in a row with no mafia at the bar, the next guest is guaranteed mafia.")]
     [SerializeField, Min(1)] private int guaranteeMafiaAfter = 4;
 
+    // Cap on target rerolls. With ~60 combinations and at most a few guests, it's never reached in practice.
+    private const int ProfileRollLimit = 64;
+
     private int evilMaskBase;
     private int evilAccessory;
     private int evilColor;
+    private bool hasProfile;
 
     // Civilians spawned back to back while no target was at the bar.
     private int civiliansSinceMafia;
@@ -125,6 +129,19 @@ public class MaskLogic : MonoBehaviour
         return false;
     }
 
+    // True if anyone at the bar wears exactly this mask, color, and accessory.
+    private bool MatchesGuestAtBar(int mask, int color, int accessory)
+    {
+        if (guestsHolder == null) return false;
+        for (int i = 0; i < guestsHolder.childCount; i++)
+        {
+            var npc = guestsHolder.GetChild(i).GetComponent<NPCData>();
+            if (npc != null && npc.maskType == mask && npc.maskColor == color && npc.accessory == accessory)
+                return true;
+        }
+        return false;
+    }
+
     // Called when a guest is removed for any reason - served, poisoned, or timed out.
     public void ReleaseGuest(int slot)
     {
@@ -133,24 +150,33 @@ public class MaskLogic : MonoBehaviour
         curGuest = slot;
     }
 
-    // The target was killed, so a fresh mafia profile goes on the sheet.
+    // A mafia member left the bar, so a fresh target goes on the sheet.
     public void RetireCurrentTarget()
     {
         CreateEnemyProfile();
     }
 
-    // The target left alive, so the same profile stays valid and they can return.
-    // Mafia presence is read from the scene now, so there's no flag to clear here.
-    public void TargetEscaped()
-    {
-    }
-
 
     public void CreateEnemyProfile()
     {
-        evilMaskBase = RandomMask();
-        evilColor = RandomMaskColor();
-        evilAccessory = RandomAccessory();
+        int oldMask = evilMaskBase;
+        int oldColor = evilColor;
+        int oldAccessory = evilAccessory;
+
+        // Reroll until the target differs from the last one and matches nobody
+        // already at the bar, so the sheet never points at an innocent.
+        for (int attempt = 0; attempt < ProfileRollLimit; attempt++)
+        {
+            evilMaskBase = RandomMask();
+            evilColor = RandomMaskColor();
+            evilAccessory = RandomAccessory();
+
+            bool sameAsOld = hasProfile
+                && evilMaskBase == oldMask && evilColor == oldColor && evilAccessory == oldAccessory;
+
+            if (!sameAsOld && !MatchesGuestAtBar(evilMaskBase, evilColor, evilAccessory)) break;
+        }
+        hasProfile = true;
 
         foreach (Transform _maskTransform in viewportHolder.Find("Masks").transform)
         {

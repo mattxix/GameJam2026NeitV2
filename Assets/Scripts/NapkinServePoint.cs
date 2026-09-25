@@ -126,9 +126,10 @@ public class NapkinServePoint : MonoBehaviour
             }
         }
 
-        // A spared target keeps their profile live so they can return later.
-        if (result == ServeResult.MafiaSpared && maskLogic != null)
-            maskLogic.TargetEscaped();
+        // Any mafia leaving the bar - killed, spared, or refused - takes their
+        // profile with them, so the sheet always shows a live target.
+        if (guest.isEvil && maskLogic != null)
+            maskLogic.RetireCurrentTarget();
 
         // GameState owns strikes, score, and the lose conditions.
         if (GameState.Instance != null) GameState.Instance.ReportServe(result);
