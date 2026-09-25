@@ -7266,7 +7266,7 @@ PrefabInstance:
     - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1298732766}
+      objectReference: {fileID: 507642580}
     - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
@@ -7327,13 +7327,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: [{fileID: 6057376884393188970, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}]
+    m_RemovedComponents:
+    - {fileID: 6057376884393188970, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1298732766}
+      addedObject: {fileID: 507642580}
     - targetCorrespondingSourceObject: {fileID: 3201333323699013705, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 507642578}
@@ -7382,6 +7383,26 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.2, y: 0.1, z: 0.2}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &507642579 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+  m_PrefabInstance: {fileID: 507642575}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &507642580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507642579}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9735e4dc95bcbaa46bea05de53819ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps: 02000000
+  useTriggerZone: 0
+  requiredTag: Glass
 --- !u!1 &519570976
 GameObject:
   m_ObjectHideFlags: 0
@@ -8028,177 +8049,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 553454312}
   m_Mesh: {fileID: -5704282706477639242, guid: 957427a1d9a21a5428316ab3bfdf3a49, type: 3}
---- !u!1 &570405598
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 570405600}
-  - component: {fileID: 570405599}
-  m_Layer: 0
-  m_Name: UmbrellaRack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &570405599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 570405598}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 965c850309956bc4f9fb50997485c0e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 1190882683966292583, guid: 04f25af9c19b433488936ade9f323fc5, type: 3}
-  columns: 3
-  rows: 2
-  spacing: {x: 0.07, y: 0.07}
-  slotRadius: 0.035
-  checkInterval: 0.25
-  refillDelay: 1
-  refillCooldown: 3
-  spareHeldItems: 1
-  effectMaterial: {fileID: 2100000, guid: d41fe3a8a2f7da44dae34adaf3d83bce, type: 2}
-  effectColor: {r: 1, g: 0.82, b: 0.4, a: 1}
-  spawnBurst: 16
-  despawnBurst: 8
---- !u!4 &570405600
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 570405598}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.4318063, y: 1.182, z: 0.211}
-  m_LocalScale: {x: 100, y: 99.999985, z: 99.999985}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &621282420
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 621282422}
-  - component: {fileID: 621282421}
-  m_Layer: 0
-  m_Name: GlassRack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &621282421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621282420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2379ccbc61501f47baf101b94a3ca38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  glassPrefab: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
-  columns: 4
-  rows: 3
-  spacing: {x: 0.18, y: 0.18}
-  slotRadius: 0.06
-  checkInterval: 0.25
-  refillDelay: 1
-  refillCooldown: 3
-  spareHeldGlasses: 1
-  effectMaterial: {fileID: 2100000, guid: d41fe3a8a2f7da44dae34adaf3d83bce, type: 2}
-  effectColor: {r: 1, g: 0.82, b: 0.4, a: 1}
-  spawnBurst: 30
-  despawnBurst: 12
---- !u!4 &621282422
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 621282420}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 2.58, y: 1.223, z: -0.117}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
---- !u!1 &629965176
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 629965178}
-  - component: {fileID: 629965177}
-  m_Layer: 0
-  m_Name: OrangeRack
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &629965177
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 629965176}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 965c850309956bc4f9fb50997485c0e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  itemPrefab: {fileID: 7380938597061088101, guid: cde95351f18e71a439c22a514167af79, type: 3}
-  columns: 3
-  rows: 2
-  spacing: {x: 0.07, y: 0.07}
-  slotRadius: 0.035
-  checkInterval: 0.25
-  refillDelay: 1
-  refillCooldown: 3
-  spareHeldItems: 1
-  effectMaterial: {fileID: 2100000, guid: d41fe3a8a2f7da44dae34adaf3d83bce, type: 2}
-  effectColor: {r: 1, g: 0.82, b: 0.4, a: 1}
-  spawnBurst: 16
-  despawnBurst: 8
---- !u!4 &629965178
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 629965176}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.458296, y: 1.143534, z: -0.09377725}
-  m_LocalScale: {x: 100, y: 99.999985, z: 99.999985}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &562063327
 GameObject:
   m_ObjectHideFlags: 0
@@ -8530,6 +8380,63 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 570264301}
   m_CullTransparentMesh: 1
+--- !u!1 &570405598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 570405600}
+  - component: {fileID: 570405599}
+  m_Layer: 0
+  m_Name: UmbrellaRack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &570405599
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570405598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965c850309956bc4f9fb50997485c0e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 1190882683966292583, guid: 04f25af9c19b433488936ade9f323fc5, type: 3}
+  columns: 3
+  rows: 2
+  spacing: {x: 0.07, y: 0.07}
+  slotRadius: 0.035
+  checkInterval: 0.25
+  refillDelay: 1
+  refillCooldown: 3
+  spareHeldItems: 1
+  effectMaterial: {fileID: 2100000, guid: d41fe3a8a2f7da44dae34adaf3d83bce, type: 2}
+  effectColor: {r: 1, g: 0.82, b: 0.4, a: 1}
+  spawnBurst: 16
+  despawnBurst: 8
+--- !u!4 &570405600
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 570405598}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.4318063, y: 1.182, z: 0.211}
+  m_LocalScale: {x: 100, y: 99.999985, z: 99.999985}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &573119054
 GameObject:
   m_ObjectHideFlags: 0
@@ -8654,6 +8561,120 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4294967295
   m_RaycastTriggerInteraction: 1
+--- !u!1 &621282420
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 621282422}
+  - component: {fileID: 621282421}
+  m_Layer: 0
+  m_Name: GlassRack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &621282421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621282420}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2379ccbc61501f47baf101b94a3ca38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  glassPrefab: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+  columns: 4
+  rows: 3
+  spacing: {x: 0.18, y: 0.18}
+  slotRadius: 0.06
+  checkInterval: 0.25
+  refillDelay: 1
+  refillCooldown: 3
+  spareHeldGlasses: 1
+  effectMaterial: {fileID: 2100000, guid: d41fe3a8a2f7da44dae34adaf3d83bce, type: 2}
+  effectColor: {r: 1, g: 0.82, b: 0.4, a: 1}
+  spawnBurst: 30
+  despawnBurst: 12
+--- !u!4 &621282422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 621282420}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 2.58, y: 1.223, z: -0.117}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 90, z: 0}
+--- !u!1 &629965176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 629965178}
+  - component: {fileID: 629965177}
+  m_Layer: 0
+  m_Name: OrangeRack
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &629965177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629965176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 965c850309956bc4f9fb50997485c0e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrefab: {fileID: 7380938597061088101, guid: cde95351f18e71a439c22a514167af79, type: 3}
+  columns: 3
+  rows: 2
+  spacing: {x: 0.07, y: 0.07}
+  slotRadius: 0.035
+  checkInterval: 0.25
+  refillDelay: 1
+  refillCooldown: 3
+  spareHeldItems: 1
+  effectMaterial: {fileID: 2100000, guid: d41fe3a8a2f7da44dae34adaf3d83bce, type: 2}
+  effectColor: {r: 1, g: 0.82, b: 0.4, a: 1}
+  spawnBurst: 16
+  despawnBurst: 8
+--- !u!4 &629965178
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629965176}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.458296, y: 1.143534, z: -0.09377725}
+  m_LocalScale: {x: 100, y: 99.999985, z: 99.999985}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &645604752
 GameObject:
   m_ObjectHideFlags: 0
@@ -12224,21 +12245,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1285173624}
   m_CullTransparentMesh: 1
---- !u!114 &1298732766
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1298732756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9735e4dc95bcbaa46bea05de53819ce3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  steps: 02000000
-  useTriggerZone: 0
-  requiredTag: Drink
 --- !u!1 &1330337726
 GameObject:
   m_ObjectHideFlags: 0
@@ -50428,7 +50434,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -7540747713407148908, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0694d8334aee4644595fe7e1a79ce9f0, type: 2}
     - target: {fileID: -3549722028878516045, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
@@ -50436,7 +50442,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -3549722028878516045, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 0a2a7ef5471817f4b9a4483b088eac5f, type: 2}
     - target: {fileID: -3084414885854350742, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
@@ -50444,7 +50450,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -3084414885854350742, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 353abf06f6a2b024e968cffe7ed456a1, type: 2}
     - target: {fileID: -2926886838456013189, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
@@ -50452,7 +50458,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: -2926886838456013189, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 523957158dce8da46b826e8d8ca7752c, type: 2}
     - target: {fileID: 919132149155446097, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
@@ -50464,7 +50470,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7256015805614323576, guid: 47f68e91fe26a2a42b2e0c3406aa720c, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: b3fd92d90ad5bc240be2bffa819f25a7, type: 2}
     m_RemovedComponents: []
