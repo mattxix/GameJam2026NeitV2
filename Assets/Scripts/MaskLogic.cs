@@ -22,11 +22,15 @@ public class MaskLogic : MonoBehaviour
     [SerializeField] private float maxSpawnDelay = 15f;
     [Tooltip("Percent chance a spawning guest is mafia, when no mafia is present.")]
     [SerializeField, Range(0, 100)] private int mafiaSpawnChance = 20;
+    [Tooltip("After this many civilians in a row with no mafia at the bar, the next guest is guaranteed mafia.")]
+    [SerializeField, Min(1)] private int guaranteeMafiaAfter = 4;
 
     private int evilMaskBase;
     private int evilAccessory;
     private int evilColor;
-    private bool evilInScene;
+
+    // Civilians spawned back to back while no target was at the bar.
+    private int civiliansSinceMafia;
 
     public Transform viewportHolder;
 
@@ -35,6 +39,8 @@ public class MaskLogic : MonoBehaviour
 
     // Which seat indices are occupied. Frees correctly when any guest leaves.
     private readonly HashSet<int> occupiedSlots = new HashSet<int>();
+
+    private Transform guestsHolder;
 
     // Colors available for masks
     public enum MaskColor
@@ -49,6 +55,15 @@ public class MaskLogic : MonoBehaviour
 
     void Start()
     {
+        GameObject holder = GameObject.Find("GuestsHolder");
+        if (holder == null)
+        {
+            Debug.LogError("MaskLogic: no GuestsHolder in the scene.", this);
+            enabled = false;
+            return;
+        }
+        guestsHolder = holder.transform;
+
         CreateEnemyProfile();
         SpawnGuestWithMask();
         StartCoroutine(NPCSpawning());
@@ -98,6 +113,18 @@ public class MaskLogic : MonoBehaviour
         return -1;
     }
 
+    // Read from the guests actually present, so every exit path clears it:
+    // poisoned, spared, refused a wrong drink, or removed any other way.
+    private bool MafiaPresent()
+    {
+        for (int i = 0; i < guestsHolder.childCount; i++)
+        {
+            var npc = guestsHolder.GetChild(i).GetComponent<NPCData>();
+            if (npc != null && npc.isEvil) return true;
+        }
+        return false;
+    }
+
     // Called when a guest is removed for any reason - served, poisoned, or timed out.
     public void ReleaseGuest(int slot)
     {
@@ -106,17 +133,16 @@ public class MaskLogic : MonoBehaviour
         curGuest = slot;
     }
 
-    // The target was killed, so a new mafia profile can appear at the ball.
+    // The target was killed, so a fresh mafia profile goes on the sheet.
     public void RetireCurrentTarget()
     {
-        evilInScene = false;
         CreateEnemyProfile();
     }
 
-    // The target left alive, so the same profile stays valid and can return.
+    // The target left alive, so the same profile stays valid and they can return.
+    // Mafia presence is read from the scene now, so there's no flag to clear here.
     public void TargetEscaped()
     {
-        evilInScene = false;
     }
 
 
@@ -164,13 +190,19 @@ public class MaskLogic : MonoBehaviour
         int slot = NextFreeSlot();
         if (slot < 0) return;
 
+        // Strict < so the Inspector value is the real percentage.
+        bool mafiaAtBar = MafiaPresent();
+        bool spawnMafia = !mafiaAtBar
+            && (Random.Range(0, 100) < mafiaSpawnChance || civiliansSinceMafia >= guaranteeMafiaAfter);
+
         int guestIndex = Random.Range(0, guestPrefabs.Length);
-        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, GameObject.Find("GuestsHolder").transform);
+        GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, guestsHolder);
         guest.name = slot.ToString();
 
-        if (Random.Range(0, 100) <= mafiaSpawnChance && !evilInScene)
+        if (spawnMafia)
         {
-            evilInScene = true;
+            civiliansSinceMafia = 0;
+
             guest.GetComponent<NPCData>().isEvil = true;
             guest.GetComponent<NPCData>().maskType = evilMaskBase;
             guest.GetComponent<NPCData>().maskColor = evilColor;
@@ -191,6 +223,9 @@ public class MaskLogic : MonoBehaviour
         }
         else
         {
+            // Only a dry spell with no target at the bar counts toward the guarantee.
+            if (!mafiaAtBar) civiliansSinceMafia++;
+
             // Civilians may share any one trait with the target, never all three,
             // so the player has to read the whole mask instead of one giveaway.
             int maskIndex, mat, accIndex;
