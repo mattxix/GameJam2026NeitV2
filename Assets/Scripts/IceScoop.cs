@@ -137,6 +137,7 @@ public class IceScoop : MonoBehaviour
             if (glass.TryAddOne() && TryRemoveOne())
             {
                 nextPourTime = Time.time + pourInterval;
+                TutorialManager.Instance?.Complete(TutorialStep.AddIce);
                 return;
             }
         }
