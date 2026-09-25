@@ -66,41 +66,9 @@ public class MaskLogic : MonoBehaviour
         guestsHolder = holder.transform;
 
         CreateEnemyProfile();
-
-        // The tutorial sends its own guests and hands control back through
-        // StartSpawning() when it finishes or is exited.
-        var tutorial = TutorialManager.Instance;
-        if (tutorial != null && tutorial.StartsOnSceneLoad) return;
-
-        StartSpawning();
-    }
-
-    private bool spawningStarted;
-
-    /// <summary>Starts the normal random guest spawning. Safe to call more than once.</summary>
-    public void StartSpawning()
-    {
-        if (spawningStarted || guestsHolder == null) return;
-        spawningStarted = true;
-
         SpawnGuestWithMask();
         StartCoroutine(NPCSpawning());
-    }
 
-    /// <summary>True if nobody is using this seat (a leaving guest still counts until they're gone).</summary>
-    public bool IsSlotFree(int slot)
-    {
-        return !occupiedSlots.Contains(slot);
-    }
-
-    /// <summary>
-    /// Sends one guest to a specific seat. Used by the tutorial.
-    /// Returns null if that seat is taken.
-    /// </summary>
-    public NPCData SpawnGuestAtSeat(int slot, bool mafia)
-    {
-        if (guestsHolder == null || slot < 0 || slot >= maxGuests || occupiedSlots.Contains(slot)) return null;
-        return SpawnGuest(slot, mafia);
     }
 
     IEnumerator NPCSpawning()
@@ -256,12 +224,7 @@ public class MaskLogic : MonoBehaviour
         if (slot < 0) return;
 
         bool spawnMafia = RollMafia(MafiaPresent());
-        SpawnGuest(slot, spawnMafia);
-    }
 
-    // Creates a guest in the given seat, as the target or as a civilian.
-    NPCData SpawnGuest(int slot, bool spawnMafia)
-    {
         int guestIndex = Random.Range(0, guestPrefabs.Length);
         GameObject guest = Instantiate(guestPrefabs[guestIndex], GuestSpawnPoint.position, GuestSpawnPoint.rotation, guestsHolder);
         guest.name = slot.ToString();
@@ -327,8 +290,6 @@ public class MaskLogic : MonoBehaviour
         occupiedSlots.Add(slot);
         numGuests = occupiedSlots.Count;
         curGuest = slot;
-
-        return npc;
     }
 
     // Attach mask and accessory to the guest's mask anchor

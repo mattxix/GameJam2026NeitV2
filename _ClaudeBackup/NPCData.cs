@@ -9,8 +9,6 @@ public class NPCData : MonoBehaviour
     public string desiredFlavor;
     public string desiredTopping;
     public bool wantsIce;
-    [Tooltip("Set before Start to guarantee this guest orders ice (used by the tutorial).")]
-    public bool forceIce;
     public bool isEvil;
     public int maskType;
     public int accessory;
@@ -46,7 +44,7 @@ public class NPCData : MonoBehaviour
     {
         //timeRemaining = 30.0f;
         desiredFlavor = RandomFlavor();
-        wantsIce = forceIce || RandomIce();
+        wantsIce = RandomIce();
         desiredTopping = RandomTopping();
 
         speechBubble.transform.Find(desiredFlavor).gameObject.SetActive(true);

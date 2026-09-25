@@ -132,9 +132,7 @@ public class NapkinServePoint : MonoBehaviour
             maskLogic.RetireCurrentTarget();
 
         // GameState owns strikes, score, and the lose conditions.
-        // During the tutorial nothing is scored: no strikes, no game over.
-        bool inTutorial = TutorialManager.Instance != null && TutorialManager.Instance.IsRunning;
-        if (!inTutorial && GameState.Instance != null) GameState.Instance.ReportServe(result);
+        if (GameState.Instance != null) GameState.Instance.ReportServe(result);
 
         // Glass goes now, garnishes and all, so it can't be pulled back off the napkin and served again.
         if (drinkObject != null) DestroyWithToppings(drinkObject);
@@ -152,10 +150,6 @@ public class NapkinServePoint : MonoBehaviour
             if (slot >= 0 && maskLogic != null) maskLogic.ReleaseGuest(slot);
             Destroy(guest.gameObject);
         }
-
-        // Told last, after the guest has started leaving, so the tutorial
-        // waits for the seat to clear before sending the next guest.
-        if (inTutorial) TutorialManager.Instance.ReportServe(result);
 
         hasServed = false;
     }

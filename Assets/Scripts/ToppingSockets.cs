@@ -54,6 +54,11 @@ public class ToppingSockets : MonoBehaviour
         CurrentTopping = args.interactableObject.transform.gameObject;
         Refresh();
         OnToppingChanged?.Invoke(CurrentTopping);
+
+        // Tutorial: a garnish on the glass finishes "Add the Topping" (Part 1)
+        // and "Make their drink" (Part 2). Only the one currently showing counts.
+        TutorialManager.Instance?.Complete(TutorialStep.AddTopping);
+        TutorialManager.Instance?.Complete(TutorialStep.MakeDrink);
     }
 
     void OnSocketEmptied(SelectExitEventArgs args)

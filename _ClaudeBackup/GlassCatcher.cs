@@ -81,7 +81,7 @@ public class GlassCatcher : MonoBehaviour
             {
                 drink.hasPoison = true;
                 OnPoisoned?.Invoke();
-                TutorialManager.Instance?.Complete(TutorialStep.AddPoison);   // -> Serve the drink
+                TutorialManager.Instance?.Complete(TutorialStep.AddPoison);
                 StartCoroutine(PoisonPuff());
             }
             return;
