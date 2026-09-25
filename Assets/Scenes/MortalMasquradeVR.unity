@@ -8170,6 +8170,34 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0.092
       objectReference: {fileID: 0}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1298732766}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: Fire
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: TutorialTaskTrigger, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 3258396158274215469, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      propertyPath: m_SelectEntered.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 3987799427872854723, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       propertyPath: liquid
       value: 
@@ -8306,7 +8334,57 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
       insertIndex: -1
       addedObject: {fileID: 1298732765}
+    - targetCorrespondingSourceObject: {fileID: 597400024762629052, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1298732766}
+    - targetCorrespondingSourceObject: {fileID: 3201333323699013705, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 507642578}
+    - targetCorrespondingSourceObject: {fileID: 3201333323699013705, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 507642577}
   m_SourcePrefab: {fileID: 100100000, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+--- !u!1 &507642576 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3201333323699013705, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
+  m_PrefabInstance: {fileID: 507642575}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &507642577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507642576}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9735e4dc95bcbaa46bea05de53819ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps: 03000000
+  useTriggerZone: 1
+  requiredTag: Ice
+--- !u!65 &507642578
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 507642576}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.2, y: 0.1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &519570976
 GameObject:
   m_ObjectHideFlags: 0
@@ -13077,6 +13155,21 @@ MonoBehaviour:
   - {fileID: 1734090216}
   - {fileID: 352734930}
   liquid: {fileID: 1712481784}
+--- !u!114 &1298732766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1298732756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9735e4dc95bcbaa46bea05de53819ce3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  steps: 02000000
+  useTriggerZone: 0
+  requiredTag: Drink
 --- !u!4 &1321784719 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4438570940570439110, guid: c3b3971de0ca07a4aba51b5729baef3c, type: 3}
