@@ -16,7 +16,6 @@ public class GameState : MonoBehaviour
 
     [Header("Scene References")]
     [SerializeField] private PopupService popupService;
-    [SerializeField] private MaskLogic maskLogic;
 
     public int Strikes => strikes;
     public int MafiaKilled => mafiaKilled;
@@ -44,6 +43,7 @@ public class GameState : MonoBehaviour
     }
 
     // Single entry point for every serve in either build.
+    // Target profiles are MaskLogic's job; this only scores.
     public void ReportServe(ServeResult result)
     {
         if (IsGameOver) return;
@@ -52,8 +52,6 @@ public class GameState : MonoBehaviour
         {
             mafiaKilled++;
             OnScoreChanged?.Invoke(mafiaKilled);
-            // Target is dead, so a fresh mafia profile can enter the ball.
-            if (maskLogic != null) maskLogic.RetireCurrentTarget();
         }
 
         if (ServeEvaluator.IsInstantLoss(result))

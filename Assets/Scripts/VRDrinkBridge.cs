@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.XR.Interaction.Toolkit.Interactables;
 using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
-// Mirrors the VR systems (LiquidGlass, GlassIceReceiver, topping socket) into
+// Mirrors the VR systems (LiquidGlass, GlassIceReceiver, topping sockets) into
 // DrinkProperties so ServeEvaluator reads real values instead of PC-era nulls.
 [RequireComponent(typeof(DrinkProperties))]
 public class VRDrinkBridge : MonoBehaviour
@@ -16,10 +18,15 @@ public class VRDrinkBridge : MonoBehaviour
         public string flavorName;
     }
 
+    // Stand-in for "more than one garnish" - never matches a real order.
+    private const string MultipleToppings = "__MULTIPLE__";
+
     [Header("Sources")]
     [SerializeField] private LiquidGlass liquid;
     [SerializeField] private GlassIceReceiver iceReceiver;
-    [SerializeField] private XRSocketInteractor toppingSocket;
+
+    [Tooltip("Every topping socket on the glass. Left empty, all child sockets are found automatically.")]
+    [SerializeField] private XRSocketInteractor[] toppingSockets;
 
     [Header("Flavor Mapping")]
     [Tooltip("Flavor names must match the material names in DrinkProperties.drinkMaterials.")]
@@ -36,21 +43,30 @@ public class VRDrinkBridge : MonoBehaviour
 
         if (liquid == null) liquid = GetComponentInChildren<LiquidGlass>();
         if (iceReceiver == null) iceReceiver = GetComponent<GlassIceReceiver>();
-        if (toppingSocket == null) toppingSocket = GetComponentInChildren<XRSocketInteractor>();
+
+        // Singular lookup only caught one socket, so the cherry and umbrella never registered.
+        if (toppingSockets == null || toppingSockets.Length == 0)
+            toppingSockets = GetComponentsInChildren<XRSocketInteractor>(true);
     }
 
     private void OnEnable()
     {
-        if (toppingSocket == null) return;
-        toppingSocket.selectEntered.AddListener(OnToppingAttached);
-        toppingSocket.selectExited.AddListener(OnToppingRemoved);
+        for (int i = 0; i < toppingSockets.Length; i++)
+        {
+            if (toppingSockets[i] == null) continue;
+            toppingSockets[i].selectEntered.AddListener(OnToppingChanged);
+            toppingSockets[i].selectExited.AddListener(OnToppingRemoved);
+        }
     }
 
     private void OnDisable()
     {
-        if (toppingSocket == null) return;
-        toppingSocket.selectEntered.RemoveListener(OnToppingAttached);
-        toppingSocket.selectExited.RemoveListener(OnToppingRemoved);
+        for (int i = 0; i < toppingSockets.Length; i++)
+        {
+            if (toppingSockets[i] == null) continue;
+            toppingSockets[i].selectEntered.RemoveListener(OnToppingChanged);
+            toppingSockets[i].selectExited.RemoveListener(OnToppingRemoved);
+        }
     }
 
     private void Update()
@@ -89,14 +105,38 @@ public class VRDrinkBridge : MonoBehaviour
         drink.hasIce = iceReceiver.CurrentIce > 0;
     }
 
-    private void OnToppingAttached(SelectEnterEventArgs args)
+    private void OnToppingChanged(SelectEnterEventArgs args)
     {
-        drink.topping = CleanName(args.interactableObject.transform.gameObject.name);
+        RecomputeTopping();
     }
 
     private void OnToppingRemoved(SelectExitEventArgs args)
     {
-        drink.topping = null;
+        RecomputeTopping();
+    }
+
+    // Reads every socket rather than trusting one event, so removals resolve correctly.
+    private void RecomputeTopping()
+    {
+        string found = null;
+        int count = 0;
+
+        for (int i = 0; i < toppingSockets.Length; i++)
+        {
+            XRSocketInteractor socket = toppingSockets[i];
+            if (socket == null || !socket.hasSelection) continue;
+
+            IList<IXRSelectInteractable> held = socket.interactablesSelected;
+            for (int j = 0; j < held.Count; j++)
+            {
+                count++;
+                if (found == null) found = CleanName(held[j].transform.gameObject.name);
+            }
+        }
+
+        if (count == 0) drink.topping = null;
+        else if (count == 1) drink.topping = found;
+        else drink.topping = MultipleToppings;
     }
 
     // VR topping prefabs carry suffixes ("(Clone)", ".VR") that won't match NPCData.
@@ -112,6 +152,4 @@ public class VRDrinkBridge : MonoBehaviour
 
         return clean.Trim();
     }
-
-   
 }
